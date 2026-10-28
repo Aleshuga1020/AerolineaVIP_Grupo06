@@ -1,10 +1,10 @@
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using ConAutenticacion.Models;
 
 namespace ConAutenticacion.Services
 {
-    // Arma el detalle de una reserva (pasajeros, asientos, vuelo, compra y último pago).
+    // Arma el detalle de una reserva (pasajeros, asientos, vuelo, compra y ultimo pago).
     public static class ReservaServicio
     {
         public static ReservaDetalleVM Detalle(AerolineaVIPContext db, Reserva reserva)

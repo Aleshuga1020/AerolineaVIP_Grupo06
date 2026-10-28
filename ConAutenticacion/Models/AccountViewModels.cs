@@ -6,7 +6,7 @@ namespace ConAutenticacion.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
-        [Display(Name = "Correo electrónico")]
+        [Display(Name = "Correo electronico")]
         public string Email { get; set; }
     }
 
@@ -29,11 +29,11 @@ namespace ConAutenticacion.Models
         public string Provider { get; set; }
 
         [Required]
-        [Display(Name = "Código")]
+        [Display(Name = "Codigo")]
         public string Code { get; set; }
         public string ReturnUrl { get; set; }
 
-        [Display(Name = "¿Recordar este explorador?")]
+        [Display(Name = "Recordar este explorador?")]
         public bool RememberBrowser { get; set; }
 
         public bool RememberMe { get; set; }
@@ -42,7 +42,7 @@ namespace ConAutenticacion.Models
     public class ForgotViewModel
     {
         [Required]
-        [Display(Name = "Correo electrónico")]
+        [Display(Name = "Correo electronico")]
         public string Email { get; set; }
     }
 
@@ -53,16 +53,16 @@ namespace ConAutenticacion.Models
         public string UserName { get; set; }
 
         //[Required]
-        //[Display(Name = "Correo electrónico")]
+        //[Display(Name = "Correo electronico")]
         // [EmailAddress]
         //public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Contraseña")]
+        [Display(Name = "Contrasena")]
         public string Password { get; set; }
 
-        [Display(Name = "¿Recordar cuenta?")]
+        [Display(Name = "Recordar cuenta?")]
         public bool RememberMe { get; set; }
     }
 
@@ -79,25 +79,25 @@ namespace ConAutenticacion.Models
         public string Apellidos { get; set; }
 
         [Required]
-        [RegularExpression(@"^[A-Za-z0-9._]{4,50}$", ErrorMessage = "Nombre de usuario: 4 a 50 caracteres (letras, dígitos, punto o guion bajo).")]
+        [RegularExpression(@"^[A-Za-z0-9._]{4,50}$", ErrorMessage = "Nombre de usuario: 4 a 50 caracteres (letras, digitos, punto o guion bajo).")]
         [Display(Name = "Nombre de usuario")]
         public string UserName { get; set; }
 
         [Required]
         [EmailAddress]
-        [Display(Name = "Correo electrónico")]
+        [Display(Name = "Correo electronico")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "La contraseña debe tener entre 8 y 100 caracteres.", MinimumLength = 8)]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,100}$", ErrorMessage = "La contraseña debe incluir mayúscula, minúscula, número y símbolo.")]
+        [StringLength(100, ErrorMessage = "La contrasena debe tener entre 8 y 100 caracteres.", MinimumLength = 8)]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,100}$", ErrorMessage = "La contrasena debe incluir mayuscula, minuscula, numero y simbolo.")]
         [DataType(DataType.Password)]
-        [Display(Name = "Contraseña")]
+        [Display(Name = "Contrasena")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirmar contraseña")]
-        [Compare("Password", ErrorMessage = "La contraseña y la contraseña de confirmación no coinciden.")]
+        [Display(Name = "Confirmar contrasena")]
+        [Compare("Password", ErrorMessage = "La contrasena y la contrasena de confirmacion no coinciden.")]
         public string ConfirmPassword { get; set; }
 
         // Solo SuperUsuario puede elegir el rol; un visitante siempre obtiene Cliente.
@@ -113,18 +113,18 @@ namespace ConAutenticacion.Models
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Correo electrónico")]
+        [Display(Name = "Correo electronico")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "El número de caracteres de {0} debe ser al menos {2}.", MinimumLength = 3)]
+        [StringLength(100, ErrorMessage = "El numero de caracteres de {0} debe ser al menos {2}.", MinimumLength = 3)]
         [DataType(DataType.Password)]
-        [Display(Name = "Contraseña")]
+        [Display(Name = "Contrasena")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirmar contraseña")]
-        [Compare("Password", ErrorMessage = "La contraseña y la contraseña de confirmación no coinciden.")]
+        [Display(Name = "Confirmar contrasena")]
+        [Compare("Password", ErrorMessage = "La contrasena y la contrasena de confirmacion no coinciden.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

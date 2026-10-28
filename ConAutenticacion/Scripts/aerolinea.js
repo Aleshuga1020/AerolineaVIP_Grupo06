@@ -1,5 +1,5 @@
-// Comportamiento mínimo de la aplicación: contador de asientos (máximo 7)
-// y campos que solo aceptan dígitos.
+// Comportamiento minimo de la aplicacion: contador de asientos (maximo 7)
+// y campos que solo aceptan digitos.
 (function () {
     var MAXIMO_ASIENTOS = 7;
 

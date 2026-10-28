@@ -73,8 +73,8 @@ namespace ConAutenticacion.Controllers
                 return View(model);
             }
 
-            // No cuenta los errores de inicio de sesión para el bloqueo de la cuenta
-            // Para permitir que los errores de contraseña desencadenen el bloqueo de la cuenta, cambie a shouldLockout: true
+            // No cuenta los errores de inicio de sesion para el bloqueo de la cuenta
+            // Para permitir que los errores de contrasena desencadenen el bloqueo de la cuenta, cambie a shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
@@ -86,7 +86,7 @@ namespace ConAutenticacion.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Intento de inicio de sesión no válido.");
+                    ModelState.AddModelError("", "Intento de inicio de sesion no valido.");
                     return View(model);
             }
         }
@@ -96,7 +96,7 @@ namespace ConAutenticacion.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
-            // Requerir que el usuario haya iniciado sesión con nombre de usuario y contraseña o inicio de sesión externo
+            // Requerir que el usuario haya iniciado sesion con nombre de usuario y contrasena o inicio de sesion externo
             if (!await SignInManager.HasBeenVerifiedAsync())
             {
                 return View("Error");
@@ -116,9 +116,9 @@ namespace ConAutenticacion.Controllers
                 return View(model);
             }
 
-            // El código siguiente protege de los ataques por fuerza bruta a los códigos de dos factores. 
-            // Si un usuario introduce códigos incorrectos durante un intervalo especificado de tiempo, la cuenta del usuario 
-            // se bloqueará durante un período de tiempo especificado. 
+            // El codigo siguiente protege de los ataques por fuerza bruta a los codigos de dos factores. 
+            // Si un usuario introduce codigos incorrectos durante un intervalo especificado de tiempo, la cuenta del usuario 
+            // se bloqueara durante un periodo de tiempo especificado. 
             // Puede configurar el bloqueo de la cuenta en IdentityConfig
             var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
@@ -129,7 +129,7 @@ namespace ConAutenticacion.Controllers
                     return View("Lockout");
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Código no válido.");
+                    ModelState.AddModelError("", "codigo no valido.");
                     return View(model);
             }
         }
@@ -171,7 +171,7 @@ namespace ConAutenticacion.Controllers
 
                     if (creadoPorSuper)
                     {
-                        // El SuperUsuario no cambia de sesión: solo registra la cuenta.
+                        // El SuperUsuario no cambia de sesion: solo registra la cuenta.
                         TempData["Mensaje"] = "Usuario " + user.UserName + " creado con rol " + rol + ".";
                         return RedirectToAction("Usuarios", "Admin");
                     }
@@ -216,7 +216,7 @@ namespace ConAutenticacion.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Sin servicio de correo configurado: no se envía enlace. Se responde siempre igual para no revelar cuentas.
+                // Sin servicio de correo configurado: no se envia enlace. Se responde siempre igual para no revelar cuentas.
                 await UserManager.FindByNameAsync(model.Email);
                 return View("ForgotPasswordConfirmation");
             }
@@ -280,7 +280,7 @@ namespace ConAutenticacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            // Solicitar redireccionamiento al proveedor de inicio de sesión externo
+            // Solicitar redireccionamiento al proveedor de inicio de sesion externo
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
@@ -330,7 +330,7 @@ namespace ConAutenticacion.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Si el usuario ya tiene un inicio de sesión, iniciar sesión del usuario con este proveedor de inicio de sesión externo
+            // Si el usuario ya tiene un inicio de sesion, iniciar sesion del usuario con este proveedor de inicio de sesion externo
             var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
             switch (result)
             {
@@ -363,7 +363,7 @@ namespace ConAutenticacion.Controllers
 
             if (ModelState.IsValid)
             {
-                // Obtener datos del usuario del proveedor de inicio de sesión externo
+                // Obtener datos del usuario del proveedor de inicio de sesion externo
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
@@ -426,7 +426,7 @@ namespace ConAutenticacion.Controllers
         }
 
         #region Aplicaciones auxiliares
-        // Se usa para la protección XSRF al agregar inicios de sesión externos
+        // Se usa para la proteccion XSRF al agregar inicios de sesion externos
         private const string XsrfKey = "XsrfId";
 
         private IAuthenticationManager AuthenticationManager

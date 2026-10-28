@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace ConAutenticacion.Controllers
 
             if (!Regex.IsMatch(codigo, @"^RV\d{8}$") || string.IsNullOrEmpty(doc))
             {
-                ModelState.AddModelError("", "Revise el código de reserva (RV + 8 dígitos) y el número de documento.");
+                ModelState.AddModelError("", "Revise el codigo de reserva (RV + 8 digitos) y el numero de documento.");
                 return View("Index");
             }
 
@@ -42,7 +42,7 @@ namespace ConAutenticacion.Controllers
             var propias = asignaciones.Where(a => a.Pasajero.NumeroDocumento == doc).ToList();
             if (propias.Count == 0)
             {
-                ModelState.AddModelError("", "No se encontró una reserva con esos datos.");
+                ModelState.AddModelError("", "No se encontro una reserva con esos datos.");
                 return View("Index");
             }
 
@@ -97,7 +97,7 @@ namespace ConAutenticacion.Controllers
             var vuelo = db.vw_VueloDetalle.FirstOrDefault(v => v.VueloId == a.VueloId);
             bool confirmado = a.EstadoAsignacionCodigo == "CONFIRMADA";
             bool yaHecho = db.CheckIn.Any(c => c.AsignacionId == a.AsignacionId && c.EstadoCheckInCodigo == "COMPLETADO");
-            string motivo = !confirmado ? "La compra aún no está pagada." : (yaHecho ? "Check-in ya registrado." : "");
+            string motivo = !confirmado ? "La compra aun no esta pagada." : (yaHecho ? "Check-in ya registrado." : "");
 
             return new CheckInItemVM
             {

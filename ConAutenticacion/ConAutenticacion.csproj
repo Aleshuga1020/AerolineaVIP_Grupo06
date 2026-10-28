@@ -517,4 +517,10 @@
   </Target>
   <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
+  <Target Name="CopiarRoslynABin" AfterTargets="Build">
+    <ItemGroup>
+      <RoslynArchivos Include="$(ProjectDir)roslyn\**\*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(RoslynArchivos)" DestinationFiles="@(RoslynArchivos->'$(OutDir)roslyn\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
 </Project>

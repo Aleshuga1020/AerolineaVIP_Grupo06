@@ -8,15 +8,15 @@
 
     <p class="text-success">@ViewBag.StatusMessage</p>
     <div>
-        <h4>Cambiar la configuración de la cuenta</h4>
+        <h4>Cambiar la configuracion de la cuenta</h4>
         <hr />
         <dl class="dl-horizontal">
-            <dt>Contraseña:</dt>
+            <dt>Contrasena:</dt>
             <dd>
                 [
                 @if (Model.HasPassword)
                 {
-                    @Html.ActionLink("Cambiar la contraseña", "ChangePassword")
+                    @Html.ActionLink("Cambiar la contrasena", "ChangePassword")
                 }
                 else
                 {
@@ -24,21 +24,21 @@
                 }
                 ]
             </dd>
-            <dt>Inicios de sesión externos:</dt>
+            <dt>Inicios de sesion externos:</dt>
             <dd>
                 @Model.Logins.Count [
                 @Html.ActionLink("Manage", "ManageLogins") ]
             </dd>
             @*
-                Los números de teléfono se pueden usar como una segunda fase de comprobación en un sistema de autenticación en dos fases.
+                Los numeros de telefono se pueden usar como una segunda fase de comprobacion en un sistema de autenticacion en dos fases.
                 
-                Consulte <a href="https://go.microsoft.com/fwlink/?LinkId=403804">este artículo</a>
-                    para obtener detalles sobre cómo configurar esta aplicación ASP.NET para que sea compatible con la autenticación en dos fases mediante SMS.
+                Consulte <a href="https://go.microsoft.com/fwlink/?LinkId=403804">este articulo</a>
+                    para obtener detalles sobre como configurar esta aplicacion ASP.NET para que sea compatible con la autenticacion en dos fases mediante SMS.
                 
-                Quite la marca de comentario del bloque siguiente después de configurar la autenticación en dos fases
+                Quite la marca de comentario del bloque siguiente despues de configurar la autenticacion en dos fases
             *@
             @*  
-                <dt>Número de teléfono:</dt>
+                <dt>Numero de telefono:</dt>
                 <dd>
                     @(Model.PhoneNumber ?? "None")
                     @if (Model.PhoneNumber != null)
@@ -57,11 +57,11 @@
                     }
                 </dd>
             *@
-            <dt>Autenticación de dos factores:</dt>
+            <dt>Autenticacion de dos factores:</dt>
             <dd>
                 <p>
-                    No hay ningún proveedor de autenticación en dos fases configurado. Consulte <a href="https://go.microsoft.com/fwlink/?LinkId=403804">este artículo</a>
-                    para obtener detalles sobre cómo configurar esta aplicación ASP.NET para que sea compatible con la autenticación en dos fases.
+                    No hay ningun proveedor de autenticacion en dos fases configurado. Consulte <a href="https://go.microsoft.com/fwlink/?LinkId=403804">este articulo</a>
+                    para obtener detalles sobre como configurar esta aplicacion ASP.NET para que sea compatible con la autenticacion en dos fases.
                 </p>
                 @*@if (Model.TwoFactor)
                     {

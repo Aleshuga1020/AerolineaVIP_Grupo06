@@ -1,4 +1,4 @@
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Owin;
@@ -15,7 +15,7 @@ namespace ConAutenticacion
             CrearRolesYUsuariosIniciales();
         }
 
-        // Roles y usuarios iniciales creados por código; las contraseñas se cifran con PasswordHasher.
+        // Roles y usuarios iniciales creados por codigo; las contrasenas se cifran con PasswordHasher.
         private void CrearRolesYUsuariosIniciales()
         {
             var context = new ApplicationDbContext();

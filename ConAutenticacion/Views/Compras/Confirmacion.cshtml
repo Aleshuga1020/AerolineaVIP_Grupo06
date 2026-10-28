@@ -1,6 +1,6 @@
 @model ConAutenticacion.Models.ReservaDetalleVM
 @{
-    ViewBag.Title = "Confirmación de la reserva";
+    ViewBag.Title = "Confirmacion de la reserva";
 }
 
 <h2>Reserva @Model.Reserva.CodigoReserva</h2>
@@ -24,7 +24,7 @@
             <strong>@(Model.UltimoPago == null ? "Sin pago" : Model.UltimoPago.EstadoPagoCodigo)</strong>
             @if (Model.UltimoPago != null)
             {
-                <span class="small">Operación @Model.UltimoPago.CodigoOperacion</span>
+                <span class="small">Operacion @Model.UltimoPago.CodigoOperacion</span>
             }
         </div>
     </div>
@@ -60,7 +60,7 @@
 }
 else
 {
-    <div class="alert alert-warning">La reserva aún no está confirmada. Complete el pago para confirmarla.</div>
+    <div class="alert alert-warning">La reserva aun no esta confirmada. Complete el pago para confirmarla.</div>
     <a class="btn btn-primary" href="@Url.Action("Pagar", "Compras", new { id = Model.Reserva.ReservaId })">Pagar reserva</a>
 }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -77,16 +77,16 @@ namespace ConAutenticacion.Controllers
             var marca = db.MarcaTarjeta.Find(marcaTarjetaCodigo);
 
             var errores = new List<string>();
-            if (metodo == null || !metodo.Activo) errores.Add("Seleccione un método de pago.");
+            if (metodo == null || !metodo.Activo) errores.Add("Seleccione un metodo de pago.");
             if (marca == null || !marca.Activa) errores.Add("Seleccione la marca de la tarjeta.");
             if (marca != null)
             {
                 if (!Validaciones.SoloDigitos(numeroTarjeta) || numeroTarjeta.Length != marca.LongitudNumero)
-                    errores.Add("El número de tarjeta debe tener " + marca.LongitudNumero + " dígitos.");
+                    errores.Add("El numero de tarjeta debe tener " + marca.LongitudNumero + " digitos.");
                 else if (!Validaciones.EsLuhnValido(numeroTarjeta))
-                    errores.Add("El número de tarjeta no es válido.");
+                    errores.Add("El numero de tarjeta no es valido.");
                 if (!Validaciones.SoloDigitos(codigoSeguridad) || codigoSeguridad.Length != marca.LongitudCodigoSeguridad)
-                    errores.Add("El código de seguridad debe tener " + marca.LongitudCodigoSeguridad + " dígitos.");
+                    errores.Add("El codigo de seguridad debe tener " + marca.LongitudCodigoSeguridad + " digitos.");
             }
             if (!Validaciones.NombreValido(titular)) errores.Add("Ingrese el nombre del titular.");
             if (!Validaciones.VencimientoValido(vencimiento)) errores.Add("El vencimiento debe tener formato MM/AA y no estar vencido.");
@@ -97,7 +97,7 @@ namespace ConAutenticacion.Controllers
                 return RedirectToAction("Pagar", new { id = reserva.ReservaId });
             }
 
-            // Regla académica de simulación (documentada): tarjetas que terminan en 0000 se rechazan.
+            // Regla academica de simulacion (documentada): tarjetas que terminan en 0000 se rechazan.
             bool rechazado = numeroTarjeta.EndsWith("0000");
             int pagosPrevios = db.Pago.Count(p => p.CompraId == compra.CompraId);
 
@@ -113,7 +113,7 @@ namespace ConAutenticacion.Controllers
                 NombreTitular = titular.Trim(),
                 CodigoOperacion = "SIM-" + reserva.CodigoReserva + "-" + (pagosPrevios + 1).ToString("D2"),
                 EsSimulado = true,
-                MensajeResultado = rechazado ? "Pago simulado rechazado (regla académica)." : "Pago simulado aprobado (académico)."
+                MensajeResultado = rechazado ? "Pago simulado rechazado (regla academica)." : "Pago simulado aprobado (academico)."
             };
 
             using (var tx = db.Database.BeginTransaction())
@@ -165,7 +165,7 @@ namespace ConAutenticacion.Controllers
             return RedirectToAction("Confirmacion", new { id = reserva.ReservaId });
         }
 
-        // ---------- Pantalla 12: confirmación ----------
+        // ---------- Pantalla 12: confirmacion ----------
 
         public ActionResult Confirmacion(int id)
         {

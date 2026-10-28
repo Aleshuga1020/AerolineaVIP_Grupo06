@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -33,7 +33,7 @@ namespace ConAutenticacion.Controllers
             if (string.IsNullOrEmpty(origen)) errores.Add("Seleccione el origen.");
             if (string.IsNullOrEmpty(destino)) errores.Add("Seleccione el destino.");
             if (!string.IsNullOrEmpty(origen) && origen == destino) errores.Add("El origen y el destino deben ser distintos.");
-            if (!fecha.HasValue) errores.Add("Ingrese una fecha válida.");
+            if (!fecha.HasValue) errores.Add("Ingrese una fecha valida.");
             else if (fecha.Value.Date < DateTime.Today) errores.Add("La fecha no puede ser anterior a hoy.");
             if (!pasajeros.HasValue || pasajeros.Value < 1 || pasajeros.Value > MaxAsientos)
                 errores.Add("Los pasajeros deben estar entre 1 y 7.");
@@ -69,7 +69,7 @@ namespace ConAutenticacion.Controllers
             var vuelo = db.vw_VueloDetalle.FirstOrDefault(v => v.VueloId == vueloId);
             if (vuelo == null || vuelo.EstadoVueloCodigo == "CANCELADO")
             {
-                TempData["Error"] = "El vuelo seleccionado no está disponible.";
+                TempData["Error"] = "El vuelo seleccionado no esta disponible.";
                 return RedirectToAction("Buscar");
             }
 
@@ -96,7 +96,7 @@ namespace ConAutenticacion.Controllers
                 return RedirectToAction("Disponibilidad", new { vueloId = vueloId });
             }
 
-            // Un bloque vacío por cada asiento elegido.
+            // Un bloque vacio por cada asiento elegido.
             for (int i = 0; i < vm.Asientos.Count; i++)
                 vm.Pasajeros.Add(new PasajeroFormulario { TipoDocumentoCodigo = "CEDULA" });
 
@@ -141,7 +141,7 @@ namespace ConAutenticacion.Controllers
             {
                 try
                 {
-                    // Revalidación definitiva dentro de la transacción (RNP-04).
+                    // Revalidacion definitiva dentro de la transaccion (RNP-04).
                     var ocupados = db.vw_EstadoAsientoVuelo
                         .Where(a => a.VueloId == vueloId && a.EstadoVisual != "DISPONIBLE")
                         .ToList().Select(a => (int)a.NumeroAsiento).ToList();
@@ -218,7 +218,7 @@ namespace ConAutenticacion.Controllers
             }
         }
 
-        // ---------- 6. Mis reservas y cancelación (pantallas 13 y 14) ----------
+        // ---------- 6. Mis reservas y cancelacion (pantallas 13 y 14) ----------
 
         [Authorize]
         public ActionResult MisReservas()
@@ -248,7 +248,7 @@ namespace ConAutenticacion.Controllers
 
             if (reserva.EstadoReservaCodigo != "PENDIENTE")
             {
-                TempData["Error"] = "Solo se pueden cancelar reservas pendientes de pago. El reembolso está pendiente de aprobación (DP-08).";
+                TempData["Error"] = "Solo se pueden cancelar reservas pendientes de pago. El reembolso esta pendiente de aprobacion (DP-08).";
                 return RedirectToAction("Gestionar", new { id = id });
             }
 
@@ -320,7 +320,7 @@ namespace ConAutenticacion.Controllers
             var e = new List<string>();
             if (vm.Vuelo == null || vm.Vuelo.EstadoVueloCodigo == "CANCELADO")
             {
-                e.Add("El vuelo seleccionado no está disponible.");
+                e.Add("El vuelo seleccionado no esta disponible.");
                 return e;
             }
             if (vm.Asientos.Count < 1 || vm.Asientos.Count > MaxAsientos)
@@ -337,7 +337,7 @@ namespace ConAutenticacion.Controllers
             foreach (var n in vm.Asientos.Where(n => !libres.Contains(n)).Distinct())
             {
                 string codigo = vm.CodigosAsiento.ContainsKey(n) ? vm.CodigosAsiento[n] : n.ToString();
-                e.Add("El asiento " + codigo + " ya no está disponible.");
+                e.Add("El asiento " + codigo + " ya no esta disponible.");
             }
 
             int activos = db.ReservaPasajeroVuelo.Count(r => r.VueloId == vm.VueloId && EstadosActivos.Contains(r.EstadoAsignacionCodigo));
@@ -368,17 +368,17 @@ namespace ConAutenticacion.Controllers
 
                 if (!Validaciones.DocumentoValido(p.TipoDocumentoCodigo, p.NumeroDocumento))
                     e.Add(n + (p.TipoDocumentoCodigo == "CEDULA"
-                        ? "la cédula debe tener 10 dígitos."
-                        : "el pasaporte debe tener entre 5 y 20 caracteres alfanuméricos."));
+                        ? "la cedula debe tener 10 digitos."
+                        : "el pasaporte debe tener entre 5 y 20 caracteres alfanumericos."));
                 else if (!documentos.Add(p.TipoDocumentoCodigo + p.NumeroDocumento))
-                    e.Add(n + "el documento está repetido en la reserva.");
+                    e.Add(n + "el documento esta repetido en la reserva.");
 
-                if (!Validaciones.NombreValido(p.Nombres)) e.Add(n + "nombres inválidos (solo letras y espacios).");
-                if (!Validaciones.NombreValido(p.Apellidos)) e.Add(n + "apellidos inválidos (solo letras y espacios).");
+                if (!Validaciones.NombreValido(p.Nombres)) e.Add(n + "nombres invalidos (solo letras y espacios).");
+                if (!Validaciones.NombreValido(p.Apellidos)) e.Add(n + "apellidos invalidos (solo letras y espacios).");
                 if (p.FechaNacimiento.HasValue && (p.FechaNacimiento.Value < new DateTime(1900, 1, 1) || p.FechaNacimiento.Value > DateTime.Today))
-                    e.Add(n + "fecha de nacimiento inválida.");
-                if (p.Correo != null && !Validaciones.CorreoValido(p.Correo)) e.Add(n + "correo inválido.");
-                if (p.Telefono != null && !Validaciones.TelefonoValido(p.Telefono)) e.Add(n + "teléfono inválido.");
+                    e.Add(n + "fecha de nacimiento invalida.");
+                if (p.Correo != null && !Validaciones.CorreoValido(p.Correo)) e.Add(n + "correo invalido.");
+                if (p.Telefono != null && !Validaciones.TelefonoValido(p.Telefono)) e.Add(n + "telefono invalido.");
             }
             return e;
         }

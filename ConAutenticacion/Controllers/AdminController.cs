@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ConAutenticacion.Models;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 
@@ -51,7 +52,7 @@ namespace ConAutenticacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CambiarRol(string userId, string rol, bool asignar)
         {
-            // Solo se gestionan roles no privilegiados desde la interfaz; SuperUsuario se crea por código.
+            // Solo se gestionan roles no privilegiados desde la interfaz; SuperUsuario se crea por codigo.
             if (rol != "Administrador" && rol != "Cliente")
             {
                 TempData["Error"] = "Rol no permitido.";
@@ -66,7 +67,7 @@ namespace ConAutenticacion.Controllers
             return RedirectToAction("Usuarios");
         }
 
-        // ---------- Pantalla 21: consultas (sin exportación ni gráficos) ----------
+        // ---------- Pantalla 21: consultas (sin exportacion ni graficos) ----------
 
         public ActionResult Reportes(string consulta, DateTime? desde, DateTime? hasta)
         {
@@ -77,11 +78,11 @@ namespace ConAutenticacion.Controllers
 
             if (h < d || (h - d).TotalDays > 366)
             {
-                vm.Mensaje = "Rango de fechas inválido: la fecha final debe ser posterior a la inicial y el rango no puede superar 366 días.";
+                vm.Mensaje = "Rango de fechas invalido: la fecha final debe ser posterior a la inicial y el rango no puede superar 366 dias.";
                 return View(vm);
             }
 
-            var hHasta = h.AddDays(1); // límite exclusivo
+            var hHasta = h.AddDays(1); // limite exclusivo
             switch (consulta)
             {
                 case "reservas":
@@ -93,7 +94,7 @@ namespace ConAutenticacion.Controllers
                     break;
 
                 case "pagos":
-                    vm.Encabezados = new[] { "Compra", "Reserva", "Fecha", "Importe (USD)", "Estado compra", "Último pago" };
+                    vm.Encabezados = new[] { "Compra", "Reserva", "Fecha", "Importe (USD)", "Estado compra", "Ultimo pago" };
                     var compras = db.Compra.Include(c => c.Reserva)
                                     .Where(c => c.FechaCompra >= d && c.FechaCompra < hHasta)
                                     .OrderBy(c => c.CompraId).ToList();

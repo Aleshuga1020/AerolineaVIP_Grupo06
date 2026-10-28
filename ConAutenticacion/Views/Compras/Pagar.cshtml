@@ -9,7 +9,7 @@
 <h2>Pago de la reserva @detalle.Reserva.CodigoReserva</h2>
 
 <div class="alert alert-warning small">
-    Pago simulado con fines académicos. No se realiza ningún cobro real. Una tarjeta cuyo número termina en <strong>0000</strong> será rechazada.
+    Pago simulado con fines academicos. No se realiza ningun cobro real. Una tarjeta cuyo numero termina en <strong>0000</strong> sera rechazada.
 </div>
 
 <div class="row g-4">
@@ -22,14 +22,14 @@
     </div>
 
     <div class="col-lg-7">
-        @using (Html.BeginForm("ProcesarPago", "Compras", FormMethod.Post, new { onsubmit = "return confirm('¿Está seguro de que desea realizar este pago?');" }))
+        @using (Html.BeginForm("ProcesarPago", "Compras", FormMethod.Post, new { onsubmit = "return confirm('Esta seguro de que desea realizar este pago?');" }))
         {
             @Html.AntiForgeryToken()
             <input type="hidden" name="compraId" value="@Model.CompraId" />
 
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label" for="metodoPagoCodigo">Método de pago</label>
+                    <label class="form-label" for="metodoPagoCodigo">Metodo de pago</label>
                     @Html.DropDownList("metodoPagoCodigo", new SelectList(metodos, "Codigo", "Nombre"), new { @class = "form-select", id = "metodoPagoCodigo", required = "required" })
                 </div>
                 <div class="col-md-6">
@@ -37,9 +37,9 @@
                     @Html.DropDownList("marcaTarjetaCodigo", new SelectList(marcas, "Codigo", "Nombre"), new { @class = "form-select", id = "marcaTarjetaCodigo", required = "required" })
                 </div>
                 <div class="col-12">
-                    <label class="form-label" for="numeroTarjeta">Número de tarjeta</label>
+                    <label class="form-label" for="numeroTarjeta">Numero de tarjeta</label>
                     <input type="text" name="numeroTarjeta" id="numeroTarjeta" class="form-control" inputmode="numeric" maxlength="16" autocomplete="off" data-solo-digitos="true" required />
-                    <div class="form-text">Visa y MasterCard: 16 dígitos · AMEX: 15 · Diners: 14.</div>
+                    <div class="form-text">Visa y MasterCard: 16 digitos · AMEX: 15 · Diners: 14.</div>
                 </div>
                 <div class="col-12">
                     <label class="form-label" for="titular">Titular</label>
@@ -50,9 +50,9 @@
                     <input type="text" name="vencimiento" id="vencimiento" class="form-control" placeholder="MM/AA" maxlength="5" pattern="(0[1-9]|1[0-2])/\d{2}" required />
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label" for="codigoSeguridad">Código de seguridad</label>
+                    <label class="form-label" for="codigoSeguridad">Codigo de seguridad</label>
                     <input type="password" name="codigoSeguridad" id="codigoSeguridad" class="form-control" inputmode="numeric" maxlength="4" autocomplete="off" data-solo-digitos="true" required />
-                    <div class="form-text">3 dígitos (4 en AMEX).</div>
+                    <div class="form-text">3 digitos (4 en AMEX).</div>
                 </div>
             </div>
 

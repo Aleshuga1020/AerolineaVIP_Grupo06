@@ -1,4 +1,4 @@
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using ConAutenticacion.Models;
@@ -11,7 +11,7 @@ namespace ConAutenticacion.Controllers
     {
         private AerolineaVIPContext db = new AerolineaVIPContext();
 
-        // ---------- Pantalla 16: comprobantes académicos propios ----------
+        // ---------- Pantalla 16: comprobantes academicos propios ----------
 
         public ActionResult Index()
         {

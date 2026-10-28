@@ -1,6 +1,6 @@
 ﻿@model ConAutenticacion.Models.VerifyPhoneNumberViewModel
 @{
-    ViewBag.Title = "Comprobar número de teléfono";
+    ViewBag.Title = "Comprobar numero de telefono";
 }
 
 <main aria-labelledby="title">
@@ -10,7 +10,7 @@
     {
         @Html.AntiForgeryToken()
         @Html.Hidden("phoneNumber", @Model.PhoneNumber)
-        <h4>Escribir el código de verificación</h4>
+        <h4>Escribir el codigo de verificacion</h4>
         <h5>@ViewBag.Status</h5>
         <hr />
         @Html.ValidationSummary("", new { @class = "text-danger" })

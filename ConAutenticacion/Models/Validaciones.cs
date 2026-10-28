@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace ConAutenticacion.Models
 {
-    // Validaciones de formato del servidor. No consultan ningún servicio externo.
+    // Validaciones de formato del servidor. No consultan ningun servicio externo.
     public static class Validaciones
     {
         public static bool SoloDigitos(string s)
@@ -12,7 +12,7 @@ namespace ConAutenticacion.Models
             return !string.IsNullOrEmpty(s) && s.All(char.IsDigit);
         }
 
-        // Algoritmo de Luhn para la verificación de formato del número de tarjeta.
+        // Algoritmo de Luhn para la verificacion de formato del numero de tarjeta.
         public static bool EsLuhnValido(string numero)
         {
             if (!SoloDigitos(numero)) return false;
@@ -32,7 +32,7 @@ namespace ConAutenticacion.Models
             return suma % 10 == 0;
         }
 
-        // Formato MM/AA y que el mes no esté vencido.
+        // Formato MM/AA y que el mes no este vencido.
         public static bool VencimientoValido(string mmAa)
         {
             if (string.IsNullOrEmpty(mmAa) || !Regex.IsMatch(mmAa, @"^(0[1-9]|1[0-2])/\d{2}$")) return false;

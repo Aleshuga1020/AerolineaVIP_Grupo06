@@ -30,12 +30,12 @@
                     <label class="form-label">Tipo de documento</label>
                     <select name="pasajeros[@i].TipoDocumentoCodigo" class="form-select" required>
                         <option value="">Seleccione</option>
-                        <option value="CEDULA" selected="@(p.TipoDocumentoCodigo == "CEDULA" ? "selected" : null)">Cédula (10 dígitos)</option>
+                        <option value="CEDULA" selected="@(p.TipoDocumentoCodigo == "CEDULA" ? "selected" : null)">Cedula (10 digitos)</option>
                         <option value="PASAPORTE" selected="@(p.TipoDocumentoCodigo == "PASAPORTE" ? "selected" : null)">Pasaporte (5 a 20 caracteres)</option>
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Número de documento</label>
+                    <label class="form-label">Numero de documento</label>
                     <input type="text" name="pasajeros[@i].NumeroDocumento" value="@p.NumeroDocumento" class="form-control" maxlength="20" required />
                 </div>
                 <div class="col-md-4">
@@ -55,7 +55,7 @@
                     <input type="email" name="pasajeros[@i].Correo" value="@p.Correo" class="form-control" maxlength="256" />
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Teléfono (opcional)</label>
+                    <label class="form-label">Telefono (opcional)</label>
                     <input type="text" name="pasajeros[@i].Telefono" value="@p.Telefono" class="form-control" maxlength="20" />
                 </div>
             </div>

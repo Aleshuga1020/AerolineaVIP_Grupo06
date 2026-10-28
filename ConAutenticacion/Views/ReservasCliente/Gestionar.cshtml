@@ -47,7 +47,7 @@
 {
     <a class="btn btn-primary" href="@Url.Action("Pagar", "Compras", new { id = reserva.ReservaId })">Pagar reserva</a>
 
-    @using (Html.BeginForm("Cancelar", "ReservasCliente", new { id = reserva.ReservaId }, FormMethod.Post, new { @class = "d-inline", onsubmit = "return confirm('¿Cancelar esta reserva?');" }))
+    @using (Html.BeginForm("Cancelar", "ReservasCliente", new { id = reserva.ReservaId }, FormMethod.Post, new { @class = "d-inline", onsubmit = "return confirm('Cancelar esta reserva?');" }))
     {
         @Html.AntiForgeryToken()
         <button type="submit" class="btn btn-outline-danger">Cancelar reserva</button>
@@ -55,7 +55,7 @@
 }
 else if (reserva.EstadoReservaCodigo == "CONFIRMADA")
 {
-    <a class="btn btn-outline-primary" href="@Url.Action("Confirmacion", "Compras", new { id = reserva.ReservaId })">Ver confirmación</a>
+    <a class="btn btn-outline-primary" href="@Url.Action("Confirmacion", "Compras", new { id = reserva.ReservaId })">Ver confirmacion</a>
     <p class="small text-muted mt-2">Las reservas confirmadas no se cancelan desde esta pantalla (DP-08 pendiente).</p>
 }
 

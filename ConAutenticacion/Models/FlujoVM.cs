@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace ConAutenticacion.Models
 {
-    // Datos de un pasajero tal como se envían desde el formulario (no es una entidad de BD).
+    // Datos de un pasajero tal como se envian desde el formulario (no es una entidad de BD).
     public class PasajeroFormulario
     {
         public string TipoDocumentoCodigo { get; set; }
