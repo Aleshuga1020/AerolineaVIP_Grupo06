@@ -1,0 +1,66 @@
+@model ConAutenticacion.Models.ReporteVM
+@{
+    ViewBag.Title = "Reportes";
+}
+
+<h2>Reportes</h2>
+
+@using (Html.BeginForm("Reportes", "Admin", FormMethod.Get, new { @class = "row g-3 mb-3" }))
+{
+    <div class="col-md-4">
+        <label class="form-label" for="consulta">Consulta</label>
+        <select name="consulta" id="consulta" class="form-select">
+            <option value="ocupacion" selected="@(Model.Consulta == "ocupacion" ? "selected" : null)">Ocupación por vuelo</option>
+            <option value="reservas" selected="@(Model.Consulta == "reservas" ? "selected" : null)">Reservas por estado</option>
+            <option value="pagos" selected="@(Model.Consulta == "pagos" ? "selected" : null)">Compras y pagos simulados</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label class="form-label" for="desde">Desde</label>
+        <input type="date" name="desde" id="desde" class="form-control" value="@(Model.Desde.ToString("yyyy-MM-dd"))" required />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label" for="hasta">Hasta</label>
+        <input type="date" name="hasta" id="hasta" class="form-control" value="@(Model.Hasta.ToString("yyyy-MM-dd"))" required />
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Consultar</button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.Mensaje))
+{
+    <div class="alert alert-danger">@Model.Mensaje</div>
+}
+else if (Model.Filas.Count == 0)
+{
+    <div class="alert alert-info">Sin resultados para el rango seleccionado.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    @foreach (var h in Model.Encabezados)
+                    {
+                        <th>@h</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var fila in Model.Filas)
+                {
+                    <tr>
+                        @foreach (var celda in fila)
+                        {
+                            <td>@celda</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<p class="small text-muted">Datos al @Model.Corte.ToString("dd/MM/yyyy HH:mm"). Los pagos son simulados.</p>

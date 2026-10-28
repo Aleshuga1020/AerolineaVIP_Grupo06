@@ -1,0 +1,13 @@
+@{
+    ViewBag.Title = "Administración";
+}
+
+<h2>Administración</h2>
+
+<div class="list-group">
+    <a class="list-group-item list-group-item-action" href="@Url.Action("Index", "Vuelos")">Vuelos</a>
+    <a class="list-group-item list-group-item-action" href="@Url.Action("Index", "Aeronaves")">Aeronaves</a>
+    <a class="list-group-item list-group-item-action" href="@Url.Action("Index", "Reservas")">Reservas</a>
+    <a class="list-group-item list-group-item-action" href="@Url.Action("Usuarios", "Admin")">Usuarios y pasajeros</a>
+    <a class="list-group-item list-group-item-action" href="@Url.Action("Reportes", "Admin")">Reportes</a>
+</div>

@@ -1,0 +1,91 @@
+@model List<ConAutenticacion.Models.GestionUsuarioVM>
+@{
+    ViewBag.Title = "Usuarios y pasajeros";
+    bool esSuper = User.IsInRole("SuperUsuario");
+    var pasajeros = (List<ConAutenticacion.Models.Pasajero>)ViewBag.Pasajeros;
+}
+
+<h2>Usuarios</h2>
+
+<div class="table-responsive mb-4">
+    <table class="table table-sm align-middle">
+        <thead>
+            <tr>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Roles</th>
+                @if (esSuper)
+                {
+                    <th>Asignar o quitar rol</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in Model)
+            {
+                <tr>
+                    <td>@u.UserName</td>
+                    <td>@u.Nombres @u.Apellidos</td>
+                    <td>@u.Email</td>
+                    <td>@u.Roles</td>
+                    @if (esSuper)
+                    {
+                        <td>
+                            @using (Html.BeginForm("CambiarRol", "Admin", FormMethod.Post, new { @class = "d-flex gap-2" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="userId" value="@u.Id" />
+                                <select name="rol" class="form-select form-select-sm">
+                                    <option value="Cliente">Cliente</option>
+                                    <option value="Administrador">Administrador</option>
+                                </select>
+                                <button type="submit" name="asignar" value="true" class="btn btn-sm btn-outline-primary">Asignar</button>
+                                <button type="submit" name="asignar" value="false" class="btn btn-sm btn-outline-danger">Quitar</button>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (esSuper)
+{
+    <p>@Html.ActionLink("Registrar un nuevo usuario", "Register", "Account")</p>
+}
+
+<h2>Pasajeros</h2>
+@if (pasajeros == null || !pasajeros.Any())
+{
+    <p class="text-muted">No hay pasajeros registrados.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Documento</th>
+                    <th>Número</th>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Correo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in pasajeros)
+                {
+                    <tr>
+                        <td>@p.TipoDocumentoCodigo</td>
+                        <td>@p.NumeroDocumento</td>
+                        <td>@p.Nombres</td>
+                        <td>@p.Apellidos</td>
+                        <td>@p.Correo</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
