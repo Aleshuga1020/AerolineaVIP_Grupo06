@@ -1,0 +1,67 @@
+@model ConAutenticacion.Models.ReservaDetalleVM
+@{
+    ViewBag.Title = "Confirmación de la reserva";
+}
+
+<h2>Reserva @Model.Reserva.CodigoReserva</h2>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-4">
+        <div class="card card-body h-100">
+            <small class="text-muted">Reserva</small>
+            <strong>@Model.Reserva.EstadoReservaCodigo</strong>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-body h-100">
+            <small class="text-muted">Compra</small>
+            <strong>@(Model.Compra == null ? "Sin compra" : Model.Compra.EstadoCompraCodigo)</strong>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-body h-100">
+            <small class="text-muted">Pago simulado</small>
+            <strong>@(Model.UltimoPago == null ? "Sin pago" : Model.UltimoPago.EstadoPagoCodigo)</strong>
+            @if (Model.UltimoPago != null)
+            {
+                <span class="small">Operación @Model.UltimoPago.CodigoOperacion</span>
+            }
+        </div>
+    </div>
+</div>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Pasajero</th>
+            <th>Vuelo</th>
+            <th>Asiento</th>
+            <th class="text-end">Importe (USD)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var a in Model.Asientos)
+        {
+            <tr>
+                <td>@a.Pasajero.Nombres @a.Pasajero.Apellidos</td>
+                <td>@(a.Vuelo == null ? "" : a.Vuelo.CodigoVuelo + " " + a.Vuelo.Origen + " → " + a.Vuelo.Destino)</td>
+                <td>@a.CodigoAsiento</td>
+                <td class="text-end">@a.Importe.ToString("0.00")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Reserva.EstadoReservaCodigo == "CONFIRMADA")
+{
+    <p class="totales">Total pagado: USD @Model.Total.ToString("0.00")</p>
+    <button type="button" class="btn btn-outline-primary" onclick="window.print()">Imprimir</button>
+    <a class="btn btn-primary" href="@Url.Action("Index", "Comprobantes")">Ver comprobantes</a>
+}
+else
+{
+    <div class="alert alert-warning">La reserva aún no está confirmada. Complete el pago para confirmarla.</div>
+    <a class="btn btn-primary" href="@Url.Action("Pagar", "Compras", new { id = Model.Reserva.ReservaId })">Pagar reserva</a>
+}
+
+<p class="mt-3">@Html.ActionLink("Mis reservas", "MisReservas", "ReservasCliente")</p>

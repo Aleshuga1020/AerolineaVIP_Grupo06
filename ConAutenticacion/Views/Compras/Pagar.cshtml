@@ -1,0 +1,63 @@
+@model ConAutenticacion.Models.Compra
+@{
+    ViewBag.Title = "Pago simulado";
+    var detalle = (ConAutenticacion.Models.ReservaDetalleVM)ViewBag.Detalle;
+    var metodos = (List<ConAutenticacion.Models.MetodoPago>)ViewBag.Metodos;
+    var marcas = (List<ConAutenticacion.Models.MarcaTarjeta>)ViewBag.Marcas;
+}
+
+<h2>Pago de la reserva @detalle.Reserva.CodigoReserva</h2>
+
+<div class="alert alert-warning small">
+    Pago simulado con fines académicos. No se realiza ningún cobro real. Una tarjeta cuyo número termina en <strong>0000</strong> será rechazada.
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card card-body">
+            <h5>Resumen</h5>
+            <p class="mb-1">Asientos: @detalle.Asientos.Count</p>
+            <p class="totales mb-0">Total: USD @Model.Importe.ToString("0.00")</p>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        @using (Html.BeginForm("ProcesarPago", "Compras", FormMethod.Post, new { onsubmit = "return confirm('¿Está seguro de que desea realizar este pago?');" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="compraId" value="@Model.CompraId" />
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="metodoPagoCodigo">Método de pago</label>
+                    @Html.DropDownList("metodoPagoCodigo", new SelectList(metodos, "Codigo", "Nombre"), new { @class = "form-select", id = "metodoPagoCodigo", required = "required" })
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="marcaTarjetaCodigo">Marca</label>
+                    @Html.DropDownList("marcaTarjetaCodigo", new SelectList(marcas, "Codigo", "Nombre"), new { @class = "form-select", id = "marcaTarjetaCodigo", required = "required" })
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="numeroTarjeta">Número de tarjeta</label>
+                    <input type="text" name="numeroTarjeta" id="numeroTarjeta" class="form-control" inputmode="numeric" maxlength="16" autocomplete="off" data-solo-digitos="true" required />
+                    <div class="form-text">Visa y MasterCard: 16 dígitos · AMEX: 15 · Diners: 14.</div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="titular">Titular</label>
+                    <input type="text" name="titular" id="titular" class="form-control" maxlength="100" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="vencimiento">Vencimiento (MM/AA)</label>
+                    <input type="text" name="vencimiento" id="vencimiento" class="form-control" placeholder="MM/AA" maxlength="5" pattern="(0[1-9]|1[0-2])/\d{2}" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="codigoSeguridad">Código de seguridad</label>
+                    <input type="password" name="codigoSeguridad" id="codigoSeguridad" class="form-control" inputmode="numeric" maxlength="4" autocomplete="off" data-solo-digitos="true" required />
+                    <div class="form-text">3 dígitos (4 en AMEX).</div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Pagar</button>
+            @Html.ActionLink("Volver", "Gestionar", "ReservasCliente", new { id = detalle.Reserva.ReservaId }, new { @class = "btn btn-link mt-3" })
+        }
+    </div>
+</div>
