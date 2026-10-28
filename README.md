@@ -7,8 +7,8 @@ Sistema web para la compra y reserva de pasajes aéreos. Desarrollado en ASP.NET
 | Universidad | Universidad de las Fuerzas Armadas ESPE |
 | Carrera | Tecnologías de la Información |
 | Materia | Desarrollo Web para Integración de Tecnologías |
-| NRC | [pendiente] |
-| Docente | [pendiente] |
+| NRC | 36641 |
+| Docente | Ing. Juan Fernando Galarraga Hurtado |
 | Grupo | 6 |
 
 **Integrantes**
