@@ -1,0 +1,38 @@
+@{
+    ViewBag.Title = "Inicio";
+}
+
+<section class="banner mb-4">
+    <h1>Aerolínea VIP</h1>
+    <p class="mb-0">Busque vuelos, seleccione asientos, pague y registre su check-in en línea.</p>
+</section>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Buscar y reservar</h5>
+                <p class="card-text">Consulte vuelos por origen, destino y fecha, y elija sus asientos.</p>
+                <a class="btn btn-primary" href="@Url.Action("Buscar", "ReservasCliente")">Buscar vuelos</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Mis reservas</h5>
+                <p class="card-text">Revise el estado de sus reservas y pague las pendientes.</p>
+                <a class="btn btn-outline-primary" href="@Url.Action("MisReservas", "ReservasCliente")">Ver mis reservas</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Check-in</h5>
+                <p class="card-text">Registre el check-in con su código de reserva y número de documento.</p>
+                <a class="btn btn-outline-primary" href="@Url.Action("Index", "CheckIn")">Hacer check-in</a>
+            </div>
+        </div>
+    </div>
+</div>

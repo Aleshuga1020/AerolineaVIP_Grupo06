@@ -1,0 +1,40 @@
+@{
+    ViewBag.Title = "Buscar vuelos";
+}
+
+<h2>Buscar vuelos</h2>
+
+@if (ViewBag.Errores != null)
+{
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach (var error in (List<string>)ViewBag.Errores)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+}
+
+@using (Html.BeginForm("Resultados", "ReservasCliente", FormMethod.Get, new { @class = "row g-3" }))
+{
+    <div class="col-md-3">
+        <label class="form-label" for="origen">Origen</label>
+        @Html.DropDownList("origen", (SelectList)ViewBag.Aeropuertos, "Seleccione", new { @class = "form-select", id = "origen", required = "required" })
+    </div>
+    <div class="col-md-3">
+        <label class="form-label" for="destino">Destino</label>
+        @Html.DropDownList("destino", (SelectList)ViewBag.Aeropuertos, "Seleccione", new { @class = "form-select", id = "destino", required = "required" })
+    </div>
+    <div class="col-md-2">
+        <label class="form-label" for="fecha">Fecha</label>
+        <input type="date" name="fecha" id="fecha" class="form-control" min="@(DateTime.Today.ToString("yyyy-MM-dd"))" required />
+    </div>
+    <div class="col-md-2">
+        <label class="form-label" for="pasajeros">Pasajeros</label>
+        <input type="number" name="pasajeros" id="pasajeros" class="form-control" min="1" max="7" value="1" required />
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+    </div>
+}

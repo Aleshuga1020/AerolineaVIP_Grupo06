@@ -1,0 +1,105 @@
+@model List<ConAutenticacion.Models.vw_EstadoAsientoVuelo>
+@{
+    ViewBag.Title = "Seleccionar asientos";
+    var vuelo = (ConAutenticacion.Models.vw_VueloDetalle)ViewBag.Vuelo;
+    bool logueado = User.Identity.IsAuthenticated;
+    var filas = Model.GroupBy(a => a.Fila).OrderBy(g => g.Key).ToList();
+}
+
+<h2>Vuelo @vuelo.CodigoVuelo</h2>
+<p>
+    @vuelo.Origen → @vuelo.Destino · @(vuelo.FechaOperacion.ToString("dd/MM/yyyy")) · salida @(vuelo.HoraSalida.ToString(@"hh\:mm"))
+    · Tarifa referencial: USD @vuelo.TarifaReferencial.ToString("0.00") por asiento
+</p>
+
+<div class="leyenda mb-3 small">
+    <span class="asiento-disponible"></span> Disponible &nbsp;
+    <span class="asiento-reservado"></span> Reservado &nbsp;
+    <span class="asiento-ocupado"></span> Ocupado &nbsp;
+    <span class="seleccionado-muestra"></span> Seleccionado (✓)
+</div>
+
+@if (ViewBag.SinAeronave == true || !Model.Any())
+{
+    <div class="alert alert-warning">Este vuelo no tiene mapa de asientos configurado.</div>
+}
+else if (!logueado)
+{
+    <div class="alert alert-info">
+        Puede revisar el mapa, pero para seleccionar asientos debe @(Html.ActionLink("iniciar sesión", "Login", "Account", new { ReturnUrl = Url.Action("Disponibilidad", "ReservasCliente", new { vueloId = vuelo.VueloId }) }, null)).
+    </div>
+}
+
+@if (Model.Any())
+{
+    if (logueado)
+    {
+        using (Html.BeginForm("Pasajeros", "ReservasCliente", FormMethod.Post, new { id = "formAsientos" }))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="vueloId" value="@vuelo.VueloId" />
+            <p class="mb-2">Seleccionados: <strong id="contadorAsientos">0</strong> de 7 · <span id="mensajeAsientos" class="text-danger"></span></p>
+            <div class="mapa mb-3">
+                <div class="cabina">
+                    @foreach (var fila in filas)
+                    {
+                        <div class="cabina-fila">
+                            <span class="numero-fila">@fila.Key</span>
+                            @{ string ladoAnterior = null; }
+                            @foreach (var a in fila.OrderBy(x => x.NumeroAsiento))
+                            {
+                                if (ladoAnterior != null && ladoAnterior != a.Lado)
+                                {
+                                    <span class="pasillo"></span>
+                                }
+                                ladoAnterior = a.Lado;
+
+                                if (a.EstadoVisual == "DISPONIBLE")
+                                {
+                                    <label class="asiento asiento-disponible" title="Asiento @a.CodigoAsiento">
+                                        <input type="checkbox" name="asientos" value="@a.NumeroAsiento" class="contador-asiento" />
+                                        @a.CodigoAsiento
+                                    </label>
+                                }
+                                else if (a.EstadoVisual == "RESERVADO")
+                                {
+                                    <span class="asiento asiento-reservado" title="Reservado">@a.CodigoAsiento</span>
+                                }
+                                else
+                                {
+                                    <span class="asiento asiento-ocupado" title="Ocupado">@a.CodigoAsiento</span>
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="btnContinuar" disabled>Continuar con los pasajeros</button>
+            @Html.ActionLink("Volver a resultados", "Buscar", "ReservasCliente", null, new { @class = "btn btn-link" })
+        }
+    }
+    else
+    {
+        <div class="mapa mb-3">
+            <div class="cabina">
+                @foreach (var fila in filas)
+                {
+                    <div class="cabina-fila">
+                        <span class="numero-fila">@fila.Key</span>
+                        @{ string ladoAnterior = null; }
+                        @foreach (var a in fila.OrderBy(x => x.NumeroAsiento))
+                        {
+                            if (ladoAnterior != null && ladoAnterior != a.Lado)
+                            {
+                                <span class="pasillo"></span>
+                            }
+                            ladoAnterior = a.Lado;
+                            var clase = a.EstadoVisual == "DISPONIBLE" ? "asiento-disponible" : (a.EstadoVisual == "RESERVADO" ? "asiento-reservado" : "asiento-ocupado");
+                            <span class="asiento @clase">@a.CodigoAsiento</span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}

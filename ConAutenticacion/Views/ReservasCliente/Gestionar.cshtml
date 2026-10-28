@@ -1,0 +1,62 @@
+@model ConAutenticacion.Models.ReservaDetalleVM
+@{
+    ViewBag.Title = "Gestionar reserva";
+    var reserva = Model.Reserva;
+}
+
+<h2>Reserva @reserva.CodigoReserva</h2>
+
+<dl class="row">
+    <dt class="col-sm-4">Estado de la reserva</dt>
+    <dd class="col-sm-8">@reserva.EstadoReservaCodigo</dd>
+    <dt class="col-sm-4">Estado de la compra</dt>
+    <dd class="col-sm-8">@(Model.Compra == null ? "Sin compra" : Model.Compra.EstadoCompraCodigo)</dd>
+    <dt class="col-sm-4">Pago simulado</dt>
+    <dd class="col-sm-8">@(Model.UltimoPago == null ? "Sin pago" : Model.UltimoPago.EstadoPagoCodigo + " (" + Model.UltimoPago.CodigoOperacion + ")")</dd>
+    <dt class="col-sm-4">Total (USD)</dt>
+    <dd class="col-sm-8">@Model.Total.ToString("0.00")</dd>
+</dl>
+
+<div class="table-responsive">
+    <table class="table table-sm align-middle">
+        <thead>
+            <tr>
+                <th>Pasajero</th>
+                <th>Documento</th>
+                <th>Vuelo</th>
+                <th>Asiento</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model.Asientos)
+            {
+                <tr>
+                    <td>@a.Pasajero.Nombres @a.Pasajero.Apellidos</td>
+                    <td>@a.Pasajero.NumeroDocumento</td>
+                    <td>@(a.Vuelo == null ? "" : a.Vuelo.CodigoVuelo)</td>
+                    <td>@a.CodigoAsiento</td>
+                    <td>@a.Estado</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (reserva.EstadoReservaCodigo == "PENDIENTE")
+{
+    <a class="btn btn-primary" href="@Url.Action("Pagar", "Compras", new { id = reserva.ReservaId })">Pagar reserva</a>
+
+    @using (Html.BeginForm("Cancelar", "ReservasCliente", new { id = reserva.ReservaId }, FormMethod.Post, new { @class = "d-inline", onsubmit = "return confirm('¿Cancelar esta reserva?');" }))
+    {
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-outline-danger">Cancelar reserva</button>
+    }
+}
+else if (reserva.EstadoReservaCodigo == "CONFIRMADA")
+{
+    <a class="btn btn-outline-primary" href="@Url.Action("Confirmacion", "Compras", new { id = reserva.ReservaId })">Ver confirmación</a>
+    <p class="small text-muted mt-2">Las reservas confirmadas no se cancelan desde esta pantalla (DP-08 pendiente).</p>
+}
+
+<p class="mt-3">@Html.ActionLink("Volver a mis reservas", "MisReservas")</p>

@@ -1,0 +1,67 @@
+@model ConAutenticacion.Models.FlujoReservaVM
+@{
+    ViewBag.Title = "Datos de los pasajeros";
+    var codigos = Model.Asientos.Select(n => Model.CodigosAsiento.ContainsKey(n) ? Model.CodigosAsiento[n] : n.ToString());
+}
+
+<h2>Datos de los pasajeros</h2>
+<p>Vuelo @Model.Vuelo.CodigoVuelo · asientos @string.Join(", ", codigos)</p>
+
+@Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+@using (Html.BeginForm("Resumen", "ReservasCliente", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="vueloId" value="@Model.VueloId" />
+    foreach (var n in Model.Asientos)
+    {
+        <input type="hidden" name="asientos" value="@n" />
+    }
+
+    for (int i = 0; i < Model.Pasajeros.Count; i++)
+    {
+        var p = Model.Pasajeros[i];
+        var codigoAsiento = Model.CodigosAsiento.ContainsKey(Model.Asientos[i]) ? Model.CodigosAsiento[Model.Asientos[i]] : Model.Asientos[i].ToString();
+
+        <fieldset class="card card-body mb-3">
+            <legend class="h5">Pasajero @(i + 1) · asiento @codigoAsiento</legend>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Tipo de documento</label>
+                    <select name="pasajeros[@i].TipoDocumentoCodigo" class="form-select" required>
+                        <option value="">Seleccione</option>
+                        <option value="CEDULA" selected="@(p.TipoDocumentoCodigo == "CEDULA" ? "selected" : null)">Cédula (10 dígitos)</option>
+                        <option value="PASAPORTE" selected="@(p.TipoDocumentoCodigo == "PASAPORTE" ? "selected" : null)">Pasaporte (5 a 20 caracteres)</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Número de documento</label>
+                    <input type="text" name="pasajeros[@i].NumeroDocumento" value="@p.NumeroDocumento" class="form-control" maxlength="20" required />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Fecha de nacimiento (opcional)</label>
+                    <input type="date" name="pasajeros[@i].FechaNacimiento" value="@(p.FechaNacimiento.HasValue ? p.FechaNacimiento.Value.ToString("yyyy-MM-dd") : "")" class="form-control" max="@(DateTime.Today.ToString("yyyy-MM-dd"))" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nombres</label>
+                    <input type="text" name="pasajeros[@i].Nombres" value="@p.Nombres" class="form-control" maxlength="100" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Apellidos</label>
+                    <input type="text" name="pasajeros[@i].Apellidos" value="@p.Apellidos" class="form-control" maxlength="100" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Correo (opcional)</label>
+                    <input type="email" name="pasajeros[@i].Correo" value="@p.Correo" class="form-control" maxlength="256" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Teléfono (opcional)</label>
+                    <input type="text" name="pasajeros[@i].Telefono" value="@p.Telefono" class="form-control" maxlength="20" />
+                </div>
+            </div>
+        </fieldset>
+    }
+
+    <button type="submit" class="btn btn-primary">Revisar reserva</button>
+    @Html.ActionLink("Cancelar", "Buscar", "ReservasCliente", null, new { @class = "btn btn-link" })
+}

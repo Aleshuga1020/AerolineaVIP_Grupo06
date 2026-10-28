@@ -1,0 +1,89 @@
+@model ConAutenticacion.Models.FlujoReservaVM
+@{
+    ViewBag.Title = "Resumen de la reserva";
+    var codigos = Model.Asientos.Select(n => Model.CodigosAsiento.ContainsKey(n) ? Model.CodigosAsiento[n] : n.ToString());
+}
+
+<h2>Resumen de la reserva</h2>
+
+<div class="table-responsive">
+    <table class="table table-sm align-middle">
+        <thead>
+            <tr>
+                <th>Vuelo</th>
+                <th>Ruta</th>
+                <th>Fecha</th>
+                <th>Salida</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Vuelo.CodigoVuelo</td>
+                <td>@Model.Vuelo.Origen → @Model.Vuelo.Destino</td>
+                <td>@(Model.Vuelo.FechaOperacion.ToString("dd/MM/yyyy"))</td>
+                <td>@(Model.Vuelo.HoraSalida.ToString(@"hh\:mm"))</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>Pasajero</th>
+            <th>Documento</th>
+            <th>Asiento</th>
+            <th class="text-end">Importe (USD)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Pasajeros.Count; i++)
+        {
+            var p = Model.Pasajeros[i];
+            <tr>
+                <td>@p.Nombres @p.Apellidos</td>
+                <td>@p.TipoDocumentoCodigo @p.NumeroDocumento</td>
+                <td>@codigos.ElementAt(i)</td>
+                <td class="text-end">@Model.Tarifa.ToString("0.00")</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="3" class="text-end">Total</th>
+            <th class="text-end totales">@Model.Total.ToString("0.00")</th>
+        </tr>
+    </tfoot>
+</table>
+
+@using (Html.BeginForm("Confirmar", "ReservasCliente", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="vueloId" value="@Model.VueloId" />
+    foreach (var n in Model.Asientos)
+    {
+        <input type="hidden" name="asientos" value="@n" />
+    }
+    for (int i = 0; i < Model.Pasajeros.Count; i++)
+    {
+        var p = Model.Pasajeros[i];
+        <input type="hidden" name="pasajeros[@i].TipoDocumentoCodigo" value="@p.TipoDocumentoCodigo" />
+        <input type="hidden" name="pasajeros[@i].NumeroDocumento" value="@p.NumeroDocumento" />
+        <input type="hidden" name="pasajeros[@i].Nombres" value="@p.Nombres" />
+        <input type="hidden" name="pasajeros[@i].Apellidos" value="@p.Apellidos" />
+        <input type="hidden" name="pasajeros[@i].FechaNacimiento" value="@(p.FechaNacimiento.HasValue ? p.FechaNacimiento.Value.ToString("yyyy-MM-dd") : "")" />
+        <input type="hidden" name="pasajeros[@i].Correo" value="@p.Correo" />
+        <input type="hidden" name="pasajeros[@i].Telefono" value="@p.Telefono" />
+    }
+
+    <div class="form-check mb-3">
+        <input type="checkbox" name="aceptaCondiciones" value="true" id="aceptaCondiciones" class="form-check-input" />
+        <input type="hidden" name="aceptaCondiciones" value="false" />
+        <label class="form-check-label" for="aceptaCondiciones">
+            Acepto las condiciones de la reserva. La reserva queda pendiente hasta el pago.
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Confirmar reserva</button>
+    @Html.ActionLink("Modificar datos", "Pasajeros", "ReservasCliente", null, new { @class = "btn btn-link" })
+}

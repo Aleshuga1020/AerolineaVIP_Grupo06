@@ -1,0 +1,48 @@
+@model IEnumerable<ConAutenticacion.Models.vw_DisponibilidadVuelo>
+@{
+    ViewBag.Title = "Vuelos disponibles";
+    var tarifas = (Dictionary<int, decimal>)ViewBag.Tarifas;
+    var fecha = (DateTime)ViewBag.Fecha;
+}
+
+<h2>Vuelos del @(fecha.ToString("dd/MM/yyyy"))</h2>
+<p>Pasajeros: @ViewBag.Pasajeros</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning">No hay vuelos con capacidad para esta búsqueda. Cambie la fecha o el número de pasajeros.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Vuelo</th>
+                    <th>Ruta</th>
+                    <th>Salida</th>
+                    <th>Llegada</th>
+                    <th>Tarifa (USD)</th>
+                    <th>Asientos libres</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var v in Model)
+                {
+                    <tr>
+                        <td>@v.CodigoVuelo</td>
+                        <td>@v.Origen → @v.Destino</td>
+                        <td>@(v.HoraSalida.ToString(@"hh\:mm"))</td>
+                        <td>@(v.HoraLlegada.ToString(@"hh\:mm"))</td>
+                        <td>@(tarifas.ContainsKey(v.VueloId) ? tarifas[v.VueloId].ToString("0.00") : "—")</td>
+                        <td>@v.Disponibles</td>
+                        <td>@Html.ActionLink("Seleccionar vuelo", "Disponibilidad", "ReservasCliente", new { vueloId = v.VueloId }, new { @class = "btn btn-sm btn-primary" })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<p>@Html.ActionLink("Cambiar búsqueda", "Buscar")</p>

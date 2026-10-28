@@ -1,0 +1,39 @@
+@model List<ConAutenticacion.Models.ReservaDetalleVM>
+@{
+    ViewBag.Title = "Mis reservas";
+}
+
+<h2>Mis reservas</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Aún no tiene reservas. @Html.ActionLink("Buscar vuelos", "Buscar") para empezar.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Estado de la reserva</th>
+                    <th>Pasajeros</th>
+                    <th>Total (USD)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var d in Model)
+                {
+                    <tr>
+                        <td>@d.Reserva.CodigoReserva</td>
+                        <td>@d.Reserva.EstadoReservaCodigo</td>
+                        <td>@d.Asientos.Count</td>
+                        <td>@d.Total.ToString("0.00")</td>
+                        <td>@Html.ActionLink("Gestionar", "Gestionar", "ReservasCliente", new { id = d.Reserva.ReservaId }, new { @class = "btn btn-sm btn-outline-primary" })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
