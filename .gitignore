@@ -7,4 +7,4 @@ packages/
 *.mdf
 *.ldf
 *.cache
-ConAutenticacion/roslyn/
+roslyn/

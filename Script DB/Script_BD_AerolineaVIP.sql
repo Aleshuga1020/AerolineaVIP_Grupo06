@@ -2,9 +2,7 @@
    PROYECTO      : Sistema web de compra y reserva de pasajes - Aerolínea VIP
    ARCHIVO       : Script_BD_AerolineaVIP.sql
    MOTOR         : Microsoft SQL Server 2016 o superior
-   ORIGEN        : Integra en un solo archivo la estructura de la versión anterior
-                   de Script_BD_AerolineaVIP.sql y los datos de Script_DATA.sql,
-                   más el módulo de pagos simulados.
+   DESCRIPCIÓN   : Crea las bases de datos del sistema con su estructura y datos de demostración.
 
    =====================================================================================
    BASES DE DATOS QUE CREA ESTE SCRIPT (ORDEN DE EJECUCIÓN)
@@ -37,37 +35,7 @@
       este script, porque las contraseñas deben generarse con el hash de Identity.
 
    =====================================================================================
-   REGISTRO DE CAMBIOS RESPECTO A LA VERSIÓN ANTERIOR
-   =====================================================================================
-   + Unificación de estructura y datos en un solo archivo (sin los DELETE de
-     Script_DATA, innecesarios porque la estructura se crea desde cero).
-   + Nueva base AerolineaVIP_Identity con las tablas estándar de ASP.NET Identity 2.x.
-   + Tabla Asiento: distribución de los 7 asientos del Embraer Phenom 300E, basada en el
-     dibujo de cabina del documento "Características del proyecto" (propuesta DP-11).
-     La vista vw_AsientoAeronave muestra los 7 asientos de cada una de las 3 aeronaves.
-   + Vista vw_EstadoAsientoVuelo: estado visual de cada asiento por vuelo
-     (Disponible = verde, Reservado = morado, Ocupado = rojo).
-   + Módulo de pagos simulados: tablas MetodoPago y MarcaTarjeta (4 marcas) y nuevas
-     columnas en Pago (método, marca, últimos 4 dígitos ficticios, titular ficticio,
-     código de operación simulada, indicador EsSimulado, mensaje de resultado).
-     La columna Pago.ReferenciaExterna se reemplaza por Pago.CodigoOperacion porque no
-     existe una pasarela externa.
-   + Ruta.TarifaReferencial y ReservaPasajeroVuelo.ImporteTramo: valores de EJEMPLO
-     para calcular importes y el detalle del comprobante (tarifas reales: DP-04).
-   + Tabla DatosEmisor y vista vw_ComprobanteDetalle: datos necesarios para que la
-     aplicación genere el comprobante académico en PDF.
-   + Numeración de comprobantes de ejemplo cambiada de "001-001-000000001" a
-     "ACAD-000001" para no imitar el formato de un documento tributario autorizado.
-   - Se eliminan las columnas ROWVERSION (VersionFila): la concurrencia avanzada está
-     fuera del alcance de la primera entrega. Las restricciones de integridad (índices
-     únicos, CHECK y triggers de reglas de negocio) se conservan.
-   - Se elimina el bloque de pruebas automáticas del script original: la fase de
-     pruebas no es entregable en esta etapa. Se reemplaza por una verificación de
-     conteos al final de la PARTE A.
-   * No se incluyen tablas ni funciones de auditoría.
-
-   =====================================================================================
-   ADVERTENCIAS ACADÉMICAS
+   ADVERTENCIAS IMPORTANTES
    =====================================================================================
    * Los pagos son SIMULADOS. No se almacenan números completos de tarjeta, códigos de
      seguridad, fechas de vencimiento ni credenciales financieras. Solo se guardan la
@@ -882,7 +850,7 @@ GO
 
 /* =====================================================================================
    A9. DATOS INICIALES: CATÁLOGOS, AEROPUERTOS, RUTAS, FRECUENCIAS, FLOTA Y ASIENTOS
-       (origen: versión anterior de Script_BD_AerolineaVIP.sql, más los catálogos de pagos simulados)
+       (catálogos, aeropuertos, rutas, frecuencias, flota y asientos)
 ===================================================================================== */
 INSERT INTO dbo.EstadoAeronave (Codigo, Descripcion) VALUES
  ('DISPONIBLE',    N'Habilitada para asignaciones'),
@@ -1020,7 +988,7 @@ WHERE m.Fabricante = N'Embraer' AND m.Nombre = N'Phenom 300E';
 GO
 
 /* =====================================================================================
-   A10. DATOS OPERATIVOS DE DEMOSTRACIÓN (origen: Script_DATA.sql)
+   A10. DATOS OPERATIVOS DE DEMOSTRACIÓN
         Semana pasada  : 12/10/2026 al 18/10/2026 -> vuelos completados.
         Semana próxima : 02/11/2026 al 08/11/2026 -> vuelos confirmados o programados.
         Se ejecuta en una sola transacción: si algo falla no queda nada a medias.
