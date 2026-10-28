@@ -20,7 +20,7 @@ namespace ConAutenticacion.Controllers
         [AllowAnonymous]
         public ActionResult Contact()
         {
-            ViewBag.Message = "Grupo 6 · Desarrollo Web para Integracion de Tecnologias.";
+            ViewBag.Message = "Grupo 6 | Desarrollo Web para Integracion de Tecnologias.";
             return View();
         }
     }

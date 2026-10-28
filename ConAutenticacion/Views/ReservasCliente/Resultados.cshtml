@@ -32,10 +32,10 @@ else
                 {
                     <tr>
                         <td>@v.CodigoVuelo</td>
-                        <td>@v.Origen → @v.Destino</td>
+                        <td>@v.Origen - @v.Destino</td>
                         <td>@(v.HoraSalida.ToString(@"hh\:mm"))</td>
                         <td>@(v.HoraLlegada.ToString(@"hh\:mm"))</td>
-                        <td>@(tarifas.ContainsKey(v.VueloId) ? tarifas[v.VueloId].ToString("0.00") : "—")</td>
+                        <td>@(tarifas.ContainsKey(v.VueloId) ? tarifas[v.VueloId].ToString("0.00") : "-")</td>
                         <td>@v.Disponibles</td>
                         <td>@Html.ActionLink("Seleccionar vuelo", "Disponibilidad", "ReservasCliente", new { vueloId = v.VueloId }, new { @class = "btn btn-sm btn-primary" })</td>
                     </tr>

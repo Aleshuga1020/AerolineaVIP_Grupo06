@@ -44,7 +44,7 @@
         {
             <tr>
                 <td>@a.Pasajero.Nombres @a.Pasajero.Apellidos</td>
-                <td>@(a.Vuelo == null ? "" : a.Vuelo.CodigoVuelo + " " + a.Vuelo.Origen + " → " + a.Vuelo.Destino)</td>
+                <td>@(a.Vuelo == null ? "" : a.Vuelo.CodigoVuelo + " " + a.Vuelo.Origen + " - " + a.Vuelo.Destino)</td>
                 <td>@a.CodigoAsiento</td>
                 <td class="text-end">@a.Importe.ToString("0.00")</td>
             </tr>

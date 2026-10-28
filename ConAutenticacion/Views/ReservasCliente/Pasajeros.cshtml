@@ -5,7 +5,7 @@
 }
 
 <h2>Datos de los pasajeros</h2>
-<p>Vuelo @Model.Vuelo.CodigoVuelo · asientos @string.Join(", ", codigos)</p>
+<p>Vuelo @Model.Vuelo.CodigoVuelo | asientos @string.Join(", ", codigos)</p>
 
 @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
@@ -24,7 +24,7 @@
         var codigoAsiento = Model.CodigosAsiento.ContainsKey(Model.Asientos[i]) ? Model.CodigosAsiento[Model.Asientos[i]] : Model.Asientos[i].ToString();
 
         <fieldset class="card card-body mb-3">
-            <legend class="h5">Pasajero @(i + 1) · asiento @codigoAsiento</legend>
+            <legend class="h5">Pasajero @(i + 1) | asiento @codigoAsiento</legend>
             <div class="row g-3">
                 <div class="col-md-4">
                     <label class="form-label">Tipo de documento</label>

@@ -104,7 +104,7 @@ namespace ConAutenticacion.Controllers
                         return new[]
                         {
                             c.CompraId.ToString(), c.Reserva.CodigoReserva, c.FechaCompra.ToString("dd/MM/yyyy"),
-                            c.Importe.ToString("0.00"), c.EstadoCompraCodigo, ultimo == null ? "—" : ultimo.EstadoPagoCodigo
+                            c.Importe.ToString("0.00"), c.EstadoCompraCodigo, ultimo == null ? "-" : ultimo.EstadoPagoCodigo
                         };
                     }).ToList();
                     break;
@@ -118,7 +118,7 @@ namespace ConAutenticacion.Controllers
                                  .ToList()
                                  .Select(v => new[]
                                  {
-                                     v.CodigoVuelo, v.FechaOperacion.ToString("dd/MM/yyyy"), v.Origen + " → " + v.Destino,
+                                     v.CodigoVuelo, v.FechaOperacion.ToString("dd/MM/yyyy"), v.Origen + " - " + v.Destino,
                                      v.Matricula ?? "Sin asignar", v.Capacidad.ToString(), v.Ocupados.ToString(),
                                      (v.Disponibles ?? 0).ToString(), v.EstadoVueloCodigo
                                  }).ToList();

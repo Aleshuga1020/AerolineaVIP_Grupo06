@@ -100,7 +100,7 @@ main.container {
 }
 
 .asiento.seleccionado::after {
-    content: "✓";
+    content: "X";
     margin-left: .2rem;
 }
 

@@ -105,7 +105,7 @@ namespace ConAutenticacion.Controllers
                 Pasajero = a.Pasajero.Nombres + " " + a.Pasajero.Apellidos,
                 Documento = a.Pasajero.NumeroDocumento,
                 Vuelo = vuelo == null ? "" : vuelo.CodigoVuelo,
-                Ruta = vuelo == null ? "" : vuelo.Origen + " → " + vuelo.Destino,
+                Ruta = vuelo == null ? "" : vuelo.Origen + " - " + vuelo.Destino,
                 Asiento = db.vw_EstadoAsientoVuelo
                             .Where(e => e.VueloId == a.VueloId && e.NumeroAsiento == a.NumeroAsiento)
                             .Select(e => e.CodigoAsiento).FirstOrDefault(),

@@ -8,15 +8,15 @@
 
 <h2>Vuelo @vuelo.CodigoVuelo</h2>
 <p>
-    @vuelo.Origen → @vuelo.Destino · @(vuelo.FechaOperacion.ToString("dd/MM/yyyy")) · salida @(vuelo.HoraSalida.ToString(@"hh\:mm"))
-    · Tarifa referencial: USD @vuelo.TarifaReferencial.ToString("0.00") por asiento
+    @vuelo.Origen - @vuelo.Destino | @(vuelo.FechaOperacion.ToString("dd/MM/yyyy")) | salida @(vuelo.HoraSalida.ToString(@"hh\:mm"))
+    | Tarifa referencial: USD @vuelo.TarifaReferencial.ToString("0.00") por asiento
 </p>
 
 <div class="leyenda mb-3 small">
     <span class="asiento-disponible"></span> Disponible &nbsp;
     <span class="asiento-reservado"></span> Reservado &nbsp;
     <span class="asiento-ocupado"></span> Ocupado &nbsp;
-    <span class="seleccionado-muestra"></span> Seleccionado (✓)
+    <span class="seleccionado-muestra"></span> Seleccionado
 </div>
 
 @if (ViewBag.SinAeronave == true || !Model.Any())
@@ -38,7 +38,7 @@ else if (!logueado)
         {
             @Html.AntiForgeryToken()
             <input type="hidden" name="vueloId" value="@vuelo.VueloId" />
-            <p class="mb-2">Seleccionados: <strong id="contadorAsientos">0</strong> de 7 · <span id="mensajeAsientos" class="text-danger"></span></p>
+            <p class="mb-2">Seleccionados: <strong id="contadorAsientos">0</strong> de 7 | <span id="mensajeAsientos" class="text-danger"></span></p>
             <div class="mapa mb-3">
                 <div class="cabina">
                     @foreach (var fila in filas)
