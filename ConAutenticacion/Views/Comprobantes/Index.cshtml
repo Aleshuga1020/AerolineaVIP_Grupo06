@@ -1,0 +1,44 @@
+@model List<ConAutenticacion.Models.Comprobante>
+@{
+    ViewBag.Title = "Comprobantes";
+}
+
+<h2>Mis comprobantes</h2>
+<p class="small text-muted">Son comprobantes académicos, no facturas tributarias. Para guardarlos, use Imprimir y elija "Guardar como PDF" en el navegador.</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No tiene comprobantes emitidos.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Número</th>
+                    <th>Tipo</th>
+                    <th>Reserva</th>
+                    <th>Fecha de emisión</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.NumeroComprobante</td>
+                        <td>@c.TipoComprobanteCodigo</td>
+                        <td>@c.Compra.Reserva.CodigoReserva</td>
+                        <td>@c.FechaEmision.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@c.EstadoComprobanteCodigo</td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Confirmacion", "Compras", new { id = c.Compra.ReservaId })">Ver</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

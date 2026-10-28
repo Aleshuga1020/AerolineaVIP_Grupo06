@@ -1,0 +1,26 @@
+@{
+    ViewBag.Title = "Check-in";
+}
+
+<h2>Check-in</h2>
+<p>Ingrese el código de su reserva (RV seguido de 8 dígitos) y su número de documento. Solo puede registrar el check-in de reservas pagadas.</p>
+
+@Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+<div class="row">
+    <div class="col-md-6 col-lg-5">
+        @using (Html.BeginForm("BuscarReserva", "CheckIn", FormMethod.Post, new { @class = "card card-body" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="mb-3">
+                <label class="form-label" for="codigoReserva">Código de reserva</label>
+                <input type="text" name="codigoReserva" id="codigoReserva" class="form-control" placeholder="RV00000001" pattern="RV\d{8}" maxlength="10" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="numeroDocumento">Número de documento</label>
+                <input type="text" name="numeroDocumento" id="numeroDocumento" class="form-control" maxlength="20" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Buscar reserva</button>
+        }
+    </div>
+</div>

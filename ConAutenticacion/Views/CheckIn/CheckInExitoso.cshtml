@@ -1,0 +1,17 @@
+@model List<ConAutenticacion.Models.CheckInItemVM>
+@{
+    ViewBag.Title = "Check-in registrado";
+}
+
+<div class="alert alert-success">
+    Check-in registrado para la reserva @ViewBag.Codigo.
+</div>
+
+<ul class="list-group mb-3">
+    @foreach (var i in Model)
+    {
+        <li class="list-group-item">@i.Pasajero · vuelo @i.Vuelo · asiento @i.Asiento</li>
+    }
+</ul>
+
+<a class="btn btn-outline-primary" href="@Url.Action("Index", "Comprobantes")">Ver comprobantes</a>

@@ -1,0 +1,58 @@
+@model List<ConAutenticacion.Models.CheckInItemVM>
+@{
+    ViewBag.Title = "Confirmar check-in";
+    bool hayElegibles = Model.Any(i => i.Elegible);
+}
+
+<h2>Check-in de la reserva @ViewBag.Codigo</h2>
+
+<table class="table table-sm align-middle">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Pasajero</th>
+            <th>Vuelo</th>
+            <th>Ruta</th>
+            <th>Asiento</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>
+                    @if (i.Elegible)
+                    {
+                        <input type="checkbox" name="asignacionesSeleccionadas" value="@i.AsignacionId" class="form-check-input" form="formCheckIn" checked />
+                    }
+                </td>
+                <td>@i.Pasajero <span class="small text-muted">(@i.Documento)</span></td>
+                <td>@i.Vuelo</td>
+                <td>@i.Ruta</td>
+                <td>@i.Asiento</td>
+                <td>@(i.Elegible ? "Listo para check-in" : i.Motivo)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (hayElegibles)
+{
+    using (Html.BeginForm("ProcesarCheckIn", "CheckIn", FormMethod.Post, new { id = "formCheckIn" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-check mb-3">
+            <input type="checkbox" name="confirmaEquipaje" value="true" id="confirmaEquipaje" class="form-check-input" />
+            <input type="hidden" name="confirmaEquipaje" value="false" />
+            <label class="form-check-label" for="confirmaEquipaje">Confirmo el equipaje de mano y las condiciones de viaje.</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Registrar check-in</button>
+    }
+}
+else
+{
+    <div class="alert alert-info">No hay pasajeros elegibles para check-in en esta reserva.</div>
+}
+
+<p class="mt-3">@Html.ActionLink("Buscar otra reserva", "Index")</p>
