@@ -45,7 +45,7 @@ ARCHIVOS REESCRITOS RESPECTO DEL PROYECTO RECIBIDO
   Content\Site.css, ConAutenticacion.csproj (entradas nuevas), Script (columnas Nombres y Apellidos en AspNetUsers)
 
 LIMITACIONES CONOCIDAS
-  - El codigo no se compilo en el entorno de elaboracion. Debe compilarse y probarse en Visual Studio.
+  - El codigo se compilo y se ejecuto en Visual Studio 2026 sobre Windows. Falta confirmar el inicio de sesion con las cuentas de prueba.
   - Los pagos son simulados. Una tarjeta cuyo numero termina en 0000 se rechaza.
   - La recuperacion de contrasena no envia correo: no hay servicio de correo configurado.
   - Pantallas 18 a 20: se usan los CRUD existentes (Vuelos, Aeronaves, Reservas) y una vista de lectura de usuarios.
