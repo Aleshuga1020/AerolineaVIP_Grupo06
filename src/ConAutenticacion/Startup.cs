@@ -12,11 +12,10 @@ namespace ConAutenticacion
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            CrearRolesYUsuariosIniciales();
         }
 
         // Roles y usuarios iniciales creados por codigo; las contrasenas se cifran con PasswordHasher.
-        private void CrearRolesYUsuariosIniciales()
+        public static void CrearRolesYUsuariosIniciales()
         {
             var context = new ApplicationDbContext();
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));

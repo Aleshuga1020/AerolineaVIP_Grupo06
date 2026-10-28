@@ -1,6 +1,6 @@
 /* =====================================================================================
    PROYECTO      : Sistema web de compra y reserva de pasajes - Aerolínea VIP
-   ARCHIVO       : Script_BD_AerolineaVIP.sql
+   ARCHIVO       : Script_BD_AerolineaVIP_Unificado.sql
    MOTOR         : Microsoft SQL Server 2016 o superior
    DESCRIPCIÓN   : Crea las bases de datos del sistema con su estructura y datos de demostración.
 
@@ -1497,5 +1497,5 @@ GO
 
 USE AerolineaVIP;
 GO
-PRINT N'OK  Script_BD_AerolineaVIP finalizado.';
+PRINT N'OK  Script_BD_AerolineaVIP_Unificado finalizado.';
 GO

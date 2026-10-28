@@ -17,17 +17,18 @@ Sistema web para la compra y reserva de pasajes aéreos. Desarrollado en ASP.NET
 
 ## Estructura del repositorio
 
-- `AerolineaVIP/`: código fuente. Contiene la solución `Prog_03.slnx` y el proyecto `ConAutenticacion`.
-- `Script DB/`: script SQL que crea las bases `AerolineaVIP` y `AerolineaVIP_Identity`.
+- `src/`: código fuente. Contiene la solución `Prog_03.slnx` y el proyecto `ConAutenticacion`.
+- `database/`: script SQL `Script_BD_AerolineaVIP_Unificado.sql` que crea las bases `AerolineaVIP` y `AerolineaVIP_Identity`.
+- `docs/`: documentación de la primera entrega y manual de uso (PDF).
 
 ## Puesta en marcha
 
-1. Ejecutar `Script DB/Script_BD_AerolineaVIP.sql` completo (F5) en SQL Server Management Studio.
-2. Abrir `AerolineaVIP/Prog_03.slnx` en Visual Studio con .NET Framework 4.8.1.
+1. Ejecutar `database/Script_BD_AerolineaVIP_Unificado.sql` completo (F5) en SQL Server Management Studio.
+2. Abrir `src/Prog_03.slnx` en Visual Studio con .NET Framework 4.8.1.
 3. Restaurar los paquetes NuGet y compilar.
-4. Ejecutar la aplicación. Al iniciar se crean los roles y los usuarios de prueba.
+4. Ejecutar la aplicación. Al iniciar, `Global.asax.cs` crea los roles y los usuarios de prueba.
 
-Requisitos: SQL Server 2016 o superior en `localhost`. Las cadenas de conexión están en `AerolineaVIP/ConAutenticacion/Web.config`.
+Requisitos: SQL Server 2016 o superior en `localhost`. Las cadenas de conexión están en `src/ConAutenticacion/Web.config`.
 
 ## Usuarios de prueba
 
