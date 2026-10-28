@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - Aerolínea VIP</title>
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark barra">
+        <div class="container">
+            @Html.ActionLink("Aerolínea VIP", "Index", "Home", null, new { @class = "navbar-brand" })
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal" aria-controls="menuPrincipal" aria-expanded="false" aria-label="Menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">@Html.ActionLink("Buscar vuelos", "Buscar", "ReservasCliente", null, new { @class = "nav-link" })</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">@Html.ActionLink("Mis reservas", "MisReservas", "ReservasCliente", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Check-in", "Index", "CheckIn", null, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Comprobantes", "Index", "Comprobantes", null, new { @class = "nav-link" })</li>
+                    }
+                    @if (User.IsInRole("Administrador") || User.IsInRole("SuperUsuario"))
+                    {
+                        <li class="nav-item">@Html.ActionLink("Administración", "Index", "Admin", null, new { @class = "nav-link" })</li>
+                    }
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        @if (TempData["Mensaje"] != null)
+        {
+            <div class="alert alert-success">@TempData["Mensaje"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="container pb-4 small text-muted">
+        Grupo 6 · Desarrollo Web para Integración de Tecnologías · Proyecto académico
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/aerolinea.js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

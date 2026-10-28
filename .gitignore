@@ -1,0 +1,9 @@
+bin/
+obj/
+packages/
+.vs/
+*.suo
+*.user
+*.mdf
+*.ldf
+*.cache

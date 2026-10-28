@@ -1,0 +1,136 @@
+:root {
+    --azul: #0B1F3A;
+    --dorado: #C9A227;
+    --verde: #2E7D32;
+    --morado: #6A1B9A;
+    --rojo: #C62828;
+    --fondo: #F4F6F9;
+}
+
+body {
+    background-color: var(--fondo);
+}
+
+main.container {
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.barra {
+    background-color: var(--azul) !important;
+}
+
+.banner {
+    background-color: var(--azul);
+    color: #fff;
+    padding: 2rem;
+    border-radius: .5rem;
+}
+
+.banner h1 {
+    color: var(--dorado);
+}
+
+.totales {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+/* Mapa de asientos */
+.mapa {
+    overflow-x: auto;
+}
+
+.cabina {
+    display: inline-block;
+    background: #fff;
+    border: 1px solid #ccd;
+    border-radius: .75rem;
+    padding: 1rem;
+}
+
+.cabina-fila {
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    margin-bottom: .35rem;
+}
+
+.numero-fila {
+    width: 2rem;
+    text-align: right;
+    font-weight: 600;
+    color: #555;
+}
+
+.asiento {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: .4rem;
+    font-size: .8rem;
+    font-weight: 600;
+    color: #fff;
+    user-select: none;
+}
+
+.asiento-disponible {
+    background-color: var(--verde);
+    cursor: pointer;
+}
+
+.asiento-reservado {
+    background-color: var(--morado);
+    cursor: not-allowed;
+}
+
+.asiento-ocupado {
+    background-color: var(--rojo);
+    cursor: not-allowed;
+}
+
+.asiento input {
+    display: none;
+}
+
+.asiento.seleccionado {
+    border: 3px solid #000;
+}
+
+.asiento.seleccionado::after {
+    content: "✓";
+    margin-left: .2rem;
+}
+
+.pasillo {
+    display: inline-block;
+    width: 1.5rem;
+}
+
+.leyenda span {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: .2rem;
+    vertical-align: middle;
+    margin-right: .3rem;
+}
+
+.leyenda .seleccionado-muestra {
+    background: #fff;
+    border: 3px solid #000;
+}
+
+@media (max-width: 576px) {
+    .cabina {
+        padding: .5rem;
+    }
+
+    .asiento {
+        width: 2rem;
+        height: 2rem;
+        font-size: .7rem;
+    }
+}
