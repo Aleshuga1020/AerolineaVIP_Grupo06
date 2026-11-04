@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
 using Owin;
@@ -18,6 +18,15 @@ namespace ConAutenticacion
         public static void CrearRolesYUsuariosIniciales()
         {
             var context = new ApplicationDbContext();
+
+            // Garantiza que las columnas Nombres y Apellidos existan en AspNetUsers si la tabla fue creada previamente sin ellas.
+            context.Database.ExecuteSqlCommand(@"
+                IF COL_LENGTH(N'dbo.AspNetUsers', N'Nombres') IS NULL
+                    ALTER TABLE dbo.AspNetUsers ADD Nombres NVARCHAR(100) NULL;
+                IF COL_LENGTH(N'dbo.AspNetUsers', N'Apellidos') IS NULL
+                    ALTER TABLE dbo.AspNetUsers ADD Apellidos NVARCHAR(100) NULL;
+            ");
+
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 

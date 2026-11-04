@@ -299,17 +299,10 @@
           <Property Name="AeronaveId" Type="int" />
           <Property Name="EstadoVueloCodigo" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_AsientoAeronave' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="vw_AsientoAeronave">
           <Key>
             <PropertyRef Name="AeronaveId" />
-            <PropertyRef Name="Matricula" />
             <PropertyRef Name="NumeroAsiento" />
-            <PropertyRef Name="CodigoAsiento" />
-            <PropertyRef Name="Fila" />
-            <PropertyRef Name="Lado" />
-            <PropertyRef Name="Ubicacion" />
           </Key>
           <Property Name="AeronaveId" Type="int" Nullable="false" />
           <Property Name="Matricula" Type="varchar" MaxLength="15" Nullable="false" />
@@ -319,27 +312,9 @@ advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_AsientoAeronave' no tien
           <Property Name="Lado" Type="char" MaxLength="1" Nullable="false" />
           <Property Name="Ubicacion" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_ComprobanteDetalle' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="vw_ComprobanteDetalle">
           <Key>
             <PropertyRef Name="ComprobanteId" />
-            <PropertyRef Name="NumeroComprobante" />
-            <PropertyRef Name="TipoComprobanteCodigo" />
-            <PropertyRef Name="TipoComprobante" />
-            <PropertyRef Name="FechaEmision" />
-            <PropertyRef Name="EstadoComprobanteCodigo" />
-            <PropertyRef Name="EmisorNombre" />
-            <PropertyRef Name="EmisorIdentificacion" />
-            <PropertyRef Name="EmisorDireccion" />
-            <PropertyRef Name="LeyendaComprobante" />
-            <PropertyRef Name="ReservaId" />
-            <PropertyRef Name="UsuarioId" />
-            <PropertyRef Name="CompraId" />
-            <PropertyRef Name="FechaCompra" />
-            <PropertyRef Name="TotalOperacion" />
-            <PropertyRef Name="MonedaCodigo" />
-            <PropertyRef Name="EstadoCompraCodigo" />
           </Key>
           <Property Name="ComprobanteId" Type="int" Nullable="false" />
           <Property Name="NumeroComprobante" Type="varchar" MaxLength="30" Nullable="false" />
@@ -368,19 +343,9 @@ advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_ComprobanteDetalle' no t
           <Property Name="TarjetaEnmascarada" Type="varchar" MaxLength="9" />
           <Property Name="EsSimulado" Type="bit" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_DisponibilidadVuelo' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="vw_DisponibilidadVuelo">
           <Key>
             <PropertyRef Name="VueloId" />
-            <PropertyRef Name="FechaOperacion" />
-            <PropertyRef Name="Origen" />
-            <PropertyRef Name="Destino" />
-            <PropertyRef Name="HoraSalida" />
-            <PropertyRef Name="HoraLlegada" />
-            <PropertyRef Name="EstadoVueloCodigo" />
-            <PropertyRef Name="Capacidad" />
-            <PropertyRef Name="Ocupados" />
           </Key>
           <Property Name="VueloId" Type="int" Nullable="false" />
           <Property Name="CodigoVuelo" Type="varchar" MaxLength="8" />
@@ -395,18 +360,10 @@ advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_DisponibilidadVuelo' no 
           <Property Name="Ocupados" Type="int" Nullable="false" />
           <Property Name="Disponibles" Type="int" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_EstadoAsientoVuelo' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="vw_EstadoAsientoVuelo">
           <Key>
             <PropertyRef Name="VueloId" />
             <PropertyRef Name="NumeroAsiento" />
-            <PropertyRef Name="CodigoAsiento" />
-            <PropertyRef Name="Fila" />
-            <PropertyRef Name="Lado" />
-            <PropertyRef Name="Ubicacion" />
-            <PropertyRef Name="EstadoVisual" />
-            <PropertyRef Name="ColorEstado" />
           </Key>
           <Property Name="VueloId" Type="int" Nullable="false" />
           <Property Name="AeronaveId" Type="int" />
@@ -421,25 +378,9 @@ advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_EstadoAsientoVuelo' no t
           <Property Name="ReservaId" Type="int" />
           <Property Name="PasajeroId" Type="int" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_VueloDetalle' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="vw_VueloDetalle">
           <Key>
             <PropertyRef Name="VueloId" />
-            <PropertyRef Name="FechaOperacion" />
-            <PropertyRef Name="DiaSemana" />
-            <PropertyRef Name="FrecuenciaId" />
-            <PropertyRef Name="RutaId" />
-            <PropertyRef Name="TarifaReferencial" />
-            <PropertyRef Name="AeropuertoOrigenId" />
-            <PropertyRef Name="AeropuertoDestinoId" />
-            <PropertyRef Name="Origen" />
-            <PropertyRef Name="CiudadOrigen" />
-            <PropertyRef Name="Destino" />
-            <PropertyRef Name="CiudadDestino" />
-            <PropertyRef Name="HoraSalida" />
-            <PropertyRef Name="HoraLlegada" />
-            <PropertyRef Name="EstadoVueloCodigo" />
           </Key>
           <Property Name="VueloId" Type="int" Nullable="false" />
           <Property Name="CodigoVuelo" Type="varchar" MaxLength="8" />
@@ -1436,12 +1377,7 @@ advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_VueloDetalle' no tiene d
         <EntityType Name="vw_AsientoAeronave">
           <Key>
             <PropertyRef Name="AeronaveId" />
-            <PropertyRef Name="Matricula" />
             <PropertyRef Name="NumeroAsiento" />
-            <PropertyRef Name="CodigoAsiento" />
-            <PropertyRef Name="Fila" />
-            <PropertyRef Name="Lado" />
-            <PropertyRef Name="Ubicacion" />
           </Key>
           <Property Name="AeronaveId" Type="Int32" Nullable="false" />
           <Property Name="Matricula" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
@@ -1454,22 +1390,6 @@ advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_VueloDetalle' no tiene d
         <EntityType Name="vw_ComprobanteDetalle">
           <Key>
             <PropertyRef Name="ComprobanteId" />
-            <PropertyRef Name="NumeroComprobante" />
-            <PropertyRef Name="TipoComprobanteCodigo" />
-            <PropertyRef Name="TipoComprobante" />
-            <PropertyRef Name="FechaEmision" />
-            <PropertyRef Name="EstadoComprobanteCodigo" />
-            <PropertyRef Name="EmisorNombre" />
-            <PropertyRef Name="EmisorIdentificacion" />
-            <PropertyRef Name="EmisorDireccion" />
-            <PropertyRef Name="LeyendaComprobante" />
-            <PropertyRef Name="ReservaId" />
-            <PropertyRef Name="UsuarioId" />
-            <PropertyRef Name="CompraId" />
-            <PropertyRef Name="FechaCompra" />
-            <PropertyRef Name="TotalOperacion" />
-            <PropertyRef Name="MonedaCodigo" />
-            <PropertyRef Name="EstadoCompraCodigo" />
           </Key>
           <Property Name="ComprobanteId" Type="Int32" Nullable="false" />
           <Property Name="NumeroComprobante" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
@@ -1501,14 +1421,6 @@ advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_VueloDetalle' no tiene d
         <EntityType Name="vw_DisponibilidadVuelo">
           <Key>
             <PropertyRef Name="VueloId" />
-            <PropertyRef Name="FechaOperacion" />
-            <PropertyRef Name="Origen" />
-            <PropertyRef Name="Destino" />
-            <PropertyRef Name="HoraSalida" />
-            <PropertyRef Name="HoraLlegada" />
-            <PropertyRef Name="EstadoVueloCodigo" />
-            <PropertyRef Name="Capacidad" />
-            <PropertyRef Name="Ocupados" />
           </Key>
           <Property Name="VueloId" Type="Int32" Nullable="false" />
           <Property Name="CodigoVuelo" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
@@ -1527,12 +1439,6 @@ advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_VueloDetalle' no tiene d
           <Key>
             <PropertyRef Name="VueloId" />
             <PropertyRef Name="NumeroAsiento" />
-            <PropertyRef Name="CodigoAsiento" />
-            <PropertyRef Name="Fila" />
-            <PropertyRef Name="Lado" />
-            <PropertyRef Name="Ubicacion" />
-            <PropertyRef Name="EstadoVisual" />
-            <PropertyRef Name="ColorEstado" />
           </Key>
           <Property Name="VueloId" Type="Int32" Nullable="false" />
           <Property Name="AeronaveId" Type="Int32" />
@@ -1550,20 +1456,6 @@ advertencia 6002: La tabla o vista 'AerolineaVIP.dbo.vw_VueloDetalle' no tiene d
         <EntityType Name="vw_VueloDetalle">
           <Key>
             <PropertyRef Name="VueloId" />
-            <PropertyRef Name="FechaOperacion" />
-            <PropertyRef Name="DiaSemana" />
-            <PropertyRef Name="FrecuenciaId" />
-            <PropertyRef Name="RutaId" />
-            <PropertyRef Name="TarifaReferencial" />
-            <PropertyRef Name="AeropuertoOrigenId" />
-            <PropertyRef Name="AeropuertoDestinoId" />
-            <PropertyRef Name="Origen" />
-            <PropertyRef Name="CiudadOrigen" />
-            <PropertyRef Name="Destino" />
-            <PropertyRef Name="CiudadDestino" />
-            <PropertyRef Name="HoraSalida" />
-            <PropertyRef Name="HoraLlegada" />
-            <PropertyRef Name="EstadoVueloCodigo" />
           </Key>
           <Property Name="VueloId" Type="Int32" Nullable="false" />
           <Property Name="CodigoVuelo" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />

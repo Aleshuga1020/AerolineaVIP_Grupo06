@@ -1,4 +1,4 @@
-/* =====================================================================================
+﻿/* =====================================================================================
    PROYECTO      : Sistema web de compra y reserva de pasajes - Aerolínea VIP
    ARCHIVO       : Script_BD_AerolineaVIP_Unificado.sql
    MOTOR         : Microsoft SQL Server 2016 o superior
@@ -1434,13 +1434,13 @@ BEGIN
         CONSTRAINT [PK_dbo.AspNetUsers] PRIMARY KEY CLUSTERED (Id)
     );
     CREATE UNIQUE NONCLUSTERED INDEX UserNameIndex ON dbo.AspNetUsers (UserName);
+END;
 
 -- Columnas de perfil usadas por ApplicationUser (bases creadas antes de esta versión).
 IF COL_LENGTH(N'dbo.AspNetUsers', N'Nombres') IS NULL
     ALTER TABLE dbo.AspNetUsers ADD Nombres NVARCHAR(100) NULL;
 IF COL_LENGTH(N'dbo.AspNetUsers', N'Apellidos') IS NULL
     ALTER TABLE dbo.AspNetUsers ADD Apellidos NVARCHAR(100) NULL;
-END;
 
 IF OBJECT_ID(N'dbo.AspNetUserClaims') IS NULL
 BEGIN
