@@ -1,4 +1,4 @@
-﻿using System.Data.Entity;
+using System.Data.Entity;
 using System.Linq;
 using ConAutenticacion.Models;
 
@@ -40,6 +40,11 @@ namespace ConAutenticacion.Services
 
             vm.Total = vm.Compra != null ? vm.Compra.Importe : suma;
             return vm;
+        }
+
+        public static ReservaDetalleVM ObtenerDetalleCompleto(AerolineaVIPContext db, Reserva reserva)
+        {
+            return Detalle(db, reserva);
         }
 
         public static string CodigoAsiento(AerolineaVIPContext db, int vueloId, byte numero)

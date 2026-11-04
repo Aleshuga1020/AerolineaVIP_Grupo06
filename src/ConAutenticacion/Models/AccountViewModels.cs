@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ConAutenticacion.Models
@@ -48,16 +48,14 @@ namespace ConAutenticacion.Models
 
     public class LoginViewModel
     {
-        [Required]
         [Display(Name = "Nombre de usuario")]
         public string UserName { get; set; }
 
-        //[Required]
-        //[Display(Name = "Correo electronico")]
-        // [EmailAddress]
-        //public string Email { get; set; }
+        [Required(ErrorMessage = "Ingrese su correo electronico o nombre de usuario.")]
+        [Display(Name = "Correo electronico")]
+        public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Ingrese su contrasena.")]
         [DataType(DataType.Password)]
         [Display(Name = "Contrasena")]
         public string Password { get; set; }

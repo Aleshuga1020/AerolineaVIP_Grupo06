@@ -1,0 +1,166 @@
+@model ConAutenticacion.Models.ReservaDetalleVM
+@{
+    ViewBag.Title = "Detalle de Reserva - Mostrador";
+    var reserva = Model.Reserva;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <span class="badge bg-secondary mb-1">Módulo Mostrador (Counter)</span>
+        <h2 class="mb-0">Reserva @reserva.CodigoReserva</h2>
+    </div>
+    <div>
+        @Html.ActionLink("Nueva consulta en mostrador", "Index", "Counter", null, new { @class = "btn btn-outline-primary" })
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- Datos del Titular y Reserva -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-header bg-white fw-bold py-3">
+                Información del Titular y Reserva
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5 text-muted">Titular de la cuenta</dt>
+                    <dd class="col-sm-7 fw-semibold">@ViewBag.TitularNombre</dd>
+
+                    <dt class="col-sm-5 text-muted">Usuario / ID</dt>
+                    <dd class="col-sm-7">@ViewBag.TitularUsuario</dd>
+
+                    <dt class="col-sm-5 text-muted">Correo electrónico</dt>
+                    <dd class="col-sm-7">@ViewBag.TitularCorreo</dd>
+
+                    <dt class="col-sm-5 text-muted">Fecha de creación</dt>
+                    <dd class="col-sm-7">@reserva.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                    <dt class="col-sm-5 text-muted">Estado de reserva</dt>
+                    <dd class="col-sm-7">
+                        @if (reserva.EstadoReservaCodigo == "CONFIRMADA")
+                        {
+                            <span class="badge bg-success">CONFIRMADA</span>
+                        }
+                        else if (reserva.EstadoReservaCodigo == "PENDIENTE")
+                        {
+                            <span class="badge bg-warning text-dark">PENDIENTE</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">@reserva.EstadoReservaCodigo</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumen de Facturación y Pago -->
+    <div class="col-md-6">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-header bg-white fw-bold py-3">
+                Resumen Financiero y Facturación
+            </div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-5 text-muted">Estado de compra</dt>
+                    <dd class="col-sm-7 fw-semibold">
+                        @(Model.Compra == null ? "Sin orden de compra" : Model.Compra.EstadoCompraCodigo)
+                    </dd>
+
+                    <dt class="col-sm-5 text-muted">Último pago simulado</dt>
+                    <dd class="col-sm-7">
+                        @if (Model.UltimoPago == null)
+                        {
+                            <span class="text-muted">Sin pagos registrados</span>
+                        }
+                        else
+                        {
+                            <span>@Model.UltimoPago.EstadoPagoCodigo (@Model.UltimoPago.CodigoOperacion)</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-5 text-muted">Tarjeta / Titular pago</dt>
+                    <dd class="col-sm-7">
+                        @if (Model.UltimoPago == null)
+                        {
+                            <span>-</span>
+                        }
+                        else
+                        {
+                            <span>@Model.UltimoPago.MarcaTarjetaCodigo **** @Model.UltimoPago.UltimosCuatroDigitos (@Model.UltimoPago.NombreTitular)</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-5 text-muted">Total pasajes</dt>
+                    <dd class="col-sm-7">@Model.Asientos.Count tramo(s)</dd>
+
+                    <dt class="col-sm-5 text-muted">Total facturado</dt>
+                    <dd class="col-sm-7 totales text-primary">USD @Model.Total.ToString("0.00")</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla de Pasajeros, Vuelos y Asientos -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white fw-bold py-3">
+        Detalle de Pasajeros, Vuelos y Asientos Asignados
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Pasajero</th>
+                        <th>Documento</th>
+                        <th>Vuelo</th>
+                        <th>Ruta</th>
+                        <th>Fecha y Hora Salida</th>
+                        <th>Asiento</th>
+                        <th>Importe (USD)</th>
+                        <th>Estado Asiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var a in Model.Asientos)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@a.Pasajero.Nombres @a.Pasajero.Apellidos</td>
+                            <td>@a.Pasajero.TipoDocumentoCodigo @a.Pasajero.NumeroDocumento</td>
+                            <td>
+                                <span class="badge bg-primary">@(a.Vuelo == null ? "-" : a.Vuelo.CodigoVuelo)</span>
+                            </td>
+                            <td>
+                                @(a.Vuelo == null ? "-" : a.Vuelo.CiudadOrigen + " (" + a.Vuelo.Origen + ") → " + a.Vuelo.CiudadDestino + " (" + a.Vuelo.Destino + ")")
+                            </td>
+                            <td>
+                                @(a.Vuelo == null ? "-" : (a.Vuelo.SalidaProgramada ?? a.Vuelo.FechaOperacion.Date.Add(a.Vuelo.HoraSalida)).ToString("dd/MM/yyyy HH:mm"))
+                            </td>
+                            <td>
+                                <span class="badge bg-dark">@(string.IsNullOrEmpty(a.CodigoAsiento) ? "N/A" : a.CodigoAsiento)</span>
+                            </td>
+                            <td>USD @a.Importe.ToString("0.00")</td>
+                            <td>
+                                @if (a.Estado == "CONFIRMADA")
+                                {
+                                    <span class="badge bg-success">CONFIRMADA</span>
+                                }
+                                else if (a.Estado == "PENDIENTE")
+                                {
+                                    <span class="badge bg-warning text-dark">PENDIENTE</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@a.Estado</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

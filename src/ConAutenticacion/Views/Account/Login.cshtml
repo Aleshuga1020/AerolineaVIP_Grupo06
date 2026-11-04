@@ -1,39 +1,57 @@
 @model ConAutenticacion.Models.LoginViewModel
 @{
-    ViewBag.Title = "Iniciar sesion";
+    ViewBag.Title = "Iniciar sesión";
 }
 
-<h2>@ViewBag.Title</h2>
-
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "card card-body" }))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-            <div class="mb-3">
-                @Html.LabelFor(m => m.UserName, new { @class = "form-label" })
-                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", autofocus = "autofocus" })
-                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+<div class="row justify-content-center py-4">
+    <div class="col-md-7 col-lg-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-header barra text-white text-center py-3">
+                <h2 class="h4 mb-0">Iniciar sesión en Aerolínea VIP</h2>
             </div>
 
-            <div class="mb-3">
-                @Html.LabelFor(m => m.Password, new { @class = "form-label" })
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            <div class="card-body p-4">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form", novalidate = "novalidate" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger py-2 small" })
+
+                    <div class="mb-3">
+                        @Html.LabelFor(m => m.Email, "Correo electrónico", new { @class = "form-label fw-semibold" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "correo@ejemplo.com o usuario", autofocus = "autofocus" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger small" })
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            @Html.LabelFor(m => m.Password, "Contraseña", new { @class = "form-label fw-semibold mb-1" })
+                            @Html.ActionLink("¿Olvidaste tu contraseña?", "ForgotPassword", "Account", null, new { @class = "small text-decoration-none" })
+                        </div>
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "••••••••" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger small" })
+                    </div>
+
+                    <div class="form-check mb-4">
+                        @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
+                        @Html.LabelFor(m => m.RememberMe, "Recordar mi sesión en este equipo", new { @class = "form-check-label" })
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary py-2 fw-semibold">
+                            Iniciar sesión
+                        </button>
+                    </div>
+                }
             </div>
 
-            <div class="form-check mb-3">
-                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "form-check-input" })
-                @Html.LabelFor(m => m.RememberMe, new { @class = "form-check-label" })
+            <div class="card-footer bg-light text-center py-3">
+                <span class="text-muted">¿No tienes cuenta?</span>
+                @Html.ActionLink("Regístrate aquí", "Register", "Account", null, new { @class = "fw-semibold text-decoration-none ms-1" })
             </div>
-
-            <button type="submit" class="btn btn-primary">Ingresar</button>
-            <p class="mt-3 mb-0">
-                @Html.ActionLink("Crear una cuenta", "Register") |
-                @Html.ActionLink("Olvide mi contrasena", "ForgotPassword")
-            </p>
-        }
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

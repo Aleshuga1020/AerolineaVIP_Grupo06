@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -20,8 +20,12 @@ namespace ConAutenticacion.Controllers
         // ---------- 1. Buscar y listar vuelos (pantallas 5 y 6) ----------
 
         [AllowAnonymous]
-        public ActionResult Buscar()
+        public ActionResult Buscar(string origen = null, string destino = null, DateTime? fecha = null, int? pasajeros = null)
         {
+            if (!string.IsNullOrEmpty(origen) || !string.IsNullOrEmpty(destino) || fecha.HasValue)
+            {
+                return Resultados(origen, destino, fecha, pasajeros ?? 1);
+            }
             CargarAeropuertos();
             return View();
         }
@@ -58,7 +62,7 @@ namespace ConAutenticacion.Controllers
                 .ToDictionary(v => v.VueloId, v => v.TarifaReferencial);
             ViewBag.Pasajeros = pasajeros.Value;
             ViewBag.Fecha = dia;
-            return View(vuelos);
+            return View("Resultados", vuelos);
         }
 
         // ---------- 2. Mapa de asientos (pantallas 7 y 8) ----------

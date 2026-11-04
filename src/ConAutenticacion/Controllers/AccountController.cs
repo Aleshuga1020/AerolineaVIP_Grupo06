@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -68,14 +68,25 @@ namespace ConAutenticacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            if (string.IsNullOrWhiteSpace(model.Email) && !string.IsNullOrWhiteSpace(model.UserName))
+            {
+                model.Email = model.UserName;
+                ModelState.Remove("Email");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
+            // Permite autenticar tanto con Email como con UserName (ej. cliente01, administrador, superusuario)
+            string identificador = (model.Email ?? model.UserName ?? "").Trim();
+            var userByEmail = await UserManager.FindByEmailAsync(identificador);
+            string userNameToSignIn = userByEmail != null ? userByEmail.UserName : identificador;
+
             // No cuenta los errores de inicio de sesion para el bloqueo de la cuenta
             // Para permitir que los errores de contrasena desencadenen el bloqueo de la cuenta, cambie a shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(userNameToSignIn, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -217,7 +228,7 @@ namespace ConAutenticacion.Controllers
             if (ModelState.IsValid)
             {
                 // Sin servicio de correo configurado: no se envia enlace. Se responde siempre igual para no revelar cuentas.
-                await UserManager.FindByNameAsync(model.Email);
+                var user = await UserManager.FindByEmailAsync(model.Email) ?? await UserManager.FindByNameAsync(model.Email);
                 return View("ForgotPasswordConfirmation");
             }
             return View(model);
@@ -250,7 +261,7 @@ namespace ConAutenticacion.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
+            var user = await UserManager.FindByEmailAsync(model.Email) ?? await UserManager.FindByNameAsync(model.Email);
             if (user == null)
             {
                 // No revelar que el usuario no existe

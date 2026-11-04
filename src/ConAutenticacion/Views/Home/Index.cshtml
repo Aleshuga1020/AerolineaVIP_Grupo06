@@ -2,39 +2,140 @@
     ViewBag.Title = "Inicio";
 }
 
-<section class="banner mb-4">
-    <img src="@Url.Content("~/imagenes/vuelos.png")" alt="Logo Vuelos VIP" width="150" height="150" class="rounded mb-3">
-    <h1>Aerolinea VIP</h1>
-    <p class="mb-2 small">Grupo 6 - Desarrollo Web para Integracion de Tecnologias - NRC 36641</p>
-    <p class="mb-0">Busque vuelos, seleccione asientos, pague y registre su check-in en linea.</p>
+<!-- Hero Banner Principal -->
+<section class="banner mb-5 shadow-sm">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <span class="badge bg-warning text-dark mb-2">Vuelos Ejecutivos &amp; Charter</span>
+            <h1 class="display-5 fw-bold mb-3">Bienvenido a Aerolínea VIP</h1>
+            <p class="lead mb-4">
+                Experimente la exclusividad de volar en nuestra flota Embraer Phenom 300E.
+                Conectamos Quito, Guayaquil, Manta y Galápagos con atención personalizada,
+                selección de asientos en cabina ejecutiva y check-in inmediato.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="@Url.Action("Buscar", "ReservasCliente")" class="btn btn-warning fw-semibold px-4">
+                    Explorar todos los vuelos
+                </a>
+                <a href="@Url.Action("Index", "CheckIn")" class="btn btn-outline-light px-4">
+                    Realizar Check-in
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-4 text-center mt-4 mt-lg-0">
+            <img src="@Url.Content("~/imagenes/vuelos.png")" alt="Logo Aerolínea VIP" width="160" height="160" class="img-fluid rounded shadow" />
+        </div>
+    </div>
 </section>
 
-<div class="row g-3">
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Buscar y reservar</h5>
-                <p class="card-text">Consulte vuelos por origen, destino y fecha, y elija sus asientos.</p>
-                <a class="btn btn-primary" href="@Url.Action("Buscar", "ReservasCliente")">Buscar vuelos</a>
+<!-- Buscador Rápido de Vuelos -->
+<section class="card shadow-sm border-0 mb-5">
+    <div class="card-header bg-white border-bottom py-3">
+        <h2 class="h5 mb-0 fw-bold text-dark">Búsqueda rápida de vuelos</h2>
+    </div>
+    <div class="card-body p-4">
+        @using (Html.BeginForm("Buscar", "ReservasCliente", FormMethod.Get, new { @class = "row g-3 align-items-end" }))
+        {
+            <div class="col-md-4">
+                <label for="origen" class="form-label fw-semibold">Origen</label>
+                <select name="origen" id="origen" class="form-select" required>
+                    <option value="">Seleccione origen...</option>
+                    <option value="UIO">Quito (UIO)</option>
+                    <option value="GYE">Guayaquil (GYE)</option>
+                    <option value="MEC">Manta (MEC)</option>
+                    <option value="GPS">Galápagos (GPS)</option>
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label for="destino" class="form-label fw-semibold">Destino</label>
+                <select name="destino" id="destino" class="form-select" required>
+                    <option value="">Seleccione destino...</option>
+                    <option value="GYE">Guayaquil (GYE)</option>
+                    <option value="UIO">Quito (UIO)</option>
+                    <option value="MEC">Manta (MEC)</option>
+                    <option value="GPS">Galápagos (GPS)</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="fecha" class="form-label fw-semibold">Fecha de salida</label>
+                <input type="date" name="fecha" id="fecha" class="form-control" min="@DateTime.Today.ToString("yyyy-MM-dd")" value="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+            </div>
+
+            <div class="col-md-2">
+                <input type="hidden" name="pasajeros" value="1" />
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+                    Buscar vuelos
+                </button>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- Destinos Populares -->
+<section class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 fw-bold mb-0">Destinos populares</h2>
+        <span class="text-muted small">Cabina exclusiva de 7 asientos por vuelo</span>
+    </div>
+
+    <div class="row g-4">
+        <!-- Destino 1: Galápagos -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-primary">Código IATA: GPS</span>
+                        <span class="fw-bold text-success">Desde USD 650.00</span>
+                    </div>
+                    <h3 class="h5 card-title fw-bold">Islas Galápagos</h3>
+                    <p class="card-text text-muted flex-grow-1">
+                        Vuele al Aeropuerto Ecológico Seymour con conexión ejecutiva dominical desde Guayaquil. Disfrute de privacidad y confort hacia el archipiélago.
+                    </p>
+                    <a href="@Url.Action("Buscar", "ReservasCliente")" class="btn btn-outline-primary w-100 mt-3">
+                        Ver disponibilidad a Galápagos
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Destino 2: Manta -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-primary">Código IATA: MEC</span>
+                        <span class="fw-bold text-success">Desde USD 450.00</span>
+                    </div>
+                    <h3 class="h5 card-title fw-bold">Manta</h3>
+                    <p class="card-text text-muted flex-grow-1">
+                        Conexión directa con el Aeropuerto Internacional Eloy Alfaro los lunes, miércoles y viernes. Ideal para viajes de negocios y escapadas a la costa.
+                    </p>
+                    <a href="@Url.Action("Buscar", "ReservasCliente")" class="btn btn-outline-primary w-100 mt-3">
+                        Ver disponibilidad a Manta
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Destino 3: Quito -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-primary">Código IATA: UIO</span>
+                        <span class="fw-bold text-success">Desde USD 450.00</span>
+                    </div>
+                    <h3 class="h5 card-title fw-bold">Quito</h3>
+                    <p class="card-text text-muted flex-grow-1">
+                        Nuestro centro principal de operaciones en el Aeropuerto Internacional Mariscal Sucre, con salidas matutinas y vespertinas toda la semana.
+                    </p>
+                    <a href="@Url.Action("Buscar", "ReservasCliente")" class="btn btn-outline-primary w-100 mt-3">
+                        Ver disponibilidad a Quito
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Mis reservas</h5>
-                <p class="card-text">Revise el estado de sus reservas y pague las pendientes.</p>
-                <a class="btn btn-outline-primary" href="@Url.Action("MisReservas", "ReservasCliente")">Ver mis reservas</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">Check-in</h5>
-                <p class="card-text">Registre el check-in con su codigo de reserva y numero de documento.</p>
-                <a class="btn btn-outline-primary" href="@Url.Action("Index", "CheckIn")">Hacer check-in</a>
-            </div>
-        </div>
-    </div>
-</div>
+</section>

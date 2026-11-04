@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -62,7 +62,7 @@ namespace ConAutenticacion.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Solo se registran asignaciones propias, pagadas (CONFIRMADA) y sin check-in previo.
+            // Solo se registran asignaciones propias, pagadas (CONFIRMADA), sin check-in previo y dentro de la ventana de tiempo (48h a 1h antes).
             var asigs = db.ReservaPasajeroVuelo.Include(a => a.Pasajero).Include(a => a.Reserva)
                 .Where(a => asignacionesSeleccionadas.Contains(a.AsignacionId)
                          && a.Reserva.UsuarioId == userId
@@ -71,6 +71,32 @@ namespace ConAutenticacion.Controllers
             {
                 TempData["Error"] = "Hay pasajeros no elegibles para check-in.";
                 return RedirectToAction("Index");
+            }
+
+            DateTime ahora = DateTime.Now;
+            foreach (var a in asigs)
+            {
+                var vuelo = db.vw_VueloDetalle.FirstOrDefault(v => v.VueloId == a.VueloId);
+                if (vuelo == null || vuelo.EstadoVueloCodigo == "CANCELADO")
+                {
+                    TempData["Error"] = "El vuelo no esta disponible para check-in.";
+                    return RedirectToAction("Index");
+                }
+
+                DateTime salidaProgramada = vuelo.SalidaProgramada ?? vuelo.FechaOperacion.Date.Add(vuelo.HoraSalida);
+                DateTime apertura = salidaProgramada.AddHours(-48);
+                DateTime cierre = salidaProgramada.AddHours(-1);
+
+                if (ahora < apertura)
+                {
+                    TempData["Error"] = "El check-in se abre 48h antes de la salida programada.";
+                    return RedirectToAction("Index");
+                }
+                if (ahora > cierre)
+                {
+                    TempData["Error"] = "El vuelo ya cerro/despego (el check-in cierra 1h antes de la salida).";
+                    return RedirectToAction("Index");
+                }
             }
 
             using (var tx = db.Database.BeginTransaction())
@@ -97,7 +123,40 @@ namespace ConAutenticacion.Controllers
             var vuelo = db.vw_VueloDetalle.FirstOrDefault(v => v.VueloId == a.VueloId);
             bool confirmado = a.EstadoAsignacionCodigo == "CONFIRMADA";
             bool yaHecho = db.CheckIn.Any(c => c.AsignacionId == a.AsignacionId && c.EstadoCheckInCodigo == "COMPLETADO");
-            string motivo = !confirmado ? "La compra aun no esta pagada." : (yaHecho ? "Check-in ya registrado." : "");
+
+            DateTime ahora = DateTime.Now;
+            bool enVentanaTiempo = false;
+            string motivoTiempo = "";
+
+            if (vuelo == null || vuelo.EstadoVueloCodigo == "CANCELADO")
+            {
+                motivoTiempo = "El vuelo fue cancelado o no esta disponible.";
+            }
+            else
+            {
+                DateTime salidaProgramada = vuelo.SalidaProgramada ?? vuelo.FechaOperacion.Date.Add(vuelo.HoraSalida);
+                DateTime apertura = salidaProgramada.AddHours(-48);
+                DateTime cierre = salidaProgramada.AddHours(-1);
+
+                if (ahora < apertura)
+                {
+                    motivoTiempo = "El check-in se abre 48h antes (" + apertura.ToString("dd/MM/yyyy HH:mm") + ").";
+                }
+                else if (ahora > cierre)
+                {
+                    motivoTiempo = "El vuelo ya cerro/despego (cierre 1h antes de la salida).";
+                }
+                else
+                {
+                    enVentanaTiempo = true;
+                }
+            }
+
+            string motivo = !confirmado
+                ? "La compra aun no esta pagada."
+                : (yaHecho
+                    ? "Check-in ya registrado."
+                    : (!enVentanaTiempo ? motivoTiempo : ""));
 
             return new CheckInItemVM
             {
@@ -105,11 +164,11 @@ namespace ConAutenticacion.Controllers
                 Pasajero = a.Pasajero.Nombres + " " + a.Pasajero.Apellidos,
                 Documento = a.Pasajero.NumeroDocumento,
                 Vuelo = vuelo == null ? "" : vuelo.CodigoVuelo,
-                Ruta = vuelo == null ? "" : vuelo.Origen + " - " + vuelo.Destino,
+                Ruta = vuelo == null ? "" : vuelo.Origen + " - " + vuelo.Destino + " (" + (vuelo.SalidaProgramada ?? vuelo.FechaOperacion.Date.Add(vuelo.HoraSalida)).ToString("dd/MM/yyyy HH:mm") + ")",
                 Asiento = db.vw_EstadoAsientoVuelo
                             .Where(e => e.VueloId == a.VueloId && e.NumeroAsiento == a.NumeroAsiento)
                             .Select(e => e.CodigoAsiento).FirstOrDefault(),
-                Elegible = confirmado && !yaHecho,
+                Elegible = confirmado && !yaHecho && enVentanaTiempo,
                 YaRegistrado = yaHecho,
                 Motivo = motivo
             };
