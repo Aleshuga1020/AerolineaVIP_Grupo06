@@ -522,7 +522,7 @@
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
   <Target Name="CopiarRoslynABin" AfterTargets="Build">
     <ItemGroup>
-      <RoslynArchivos Include="$(ProjectDir)roslyn\**\*.*" />
+      <RoslynArchivos Include="$(ProjectDir)..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.4.1.0\tools\Roslyn-4.1.0\**\*.*" />
     </ItemGroup>
     <Copy SourceFiles="@(RoslynArchivos)" DestinationFiles="@(RoslynArchivos->'$(OutDir)roslyn\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
