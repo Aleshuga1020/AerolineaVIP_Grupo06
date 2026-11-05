@@ -1,0 +1,50 @@
+@model ConAutenticacion.Models.CrearUsuarioVM
+@{
+    ViewBag.Title = "Crear usuario";
+    var roles = (List<SelectListItem>)ViewBag.Roles;
+}
+
+<h2>Crear usuario</h2>
+<p class="text-muted">El usuario creado podra iniciar sesion con la contrasena inicial indicada.</p>
+
+@using (Html.BeginForm("CrearUsuario", "Admin", FormMethod.Post, new { @class = "row g-3 col-lg-8" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+    <div class="col-md-6">
+        @Html.LabelFor(m => m.UserName, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger small" })
+    </div>
+    <div class="col-md-6">
+        @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger small" })
+    </div>
+    <div class="col-md-6">
+        @Html.LabelFor(m => m.Nombres, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Nombres, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Nombres, "", new { @class = "text-danger small" })
+    </div>
+    <div class="col-md-6">
+        @Html.LabelFor(m => m.Apellidos, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Apellidos, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Apellidos, "", new { @class = "text-danger small" })
+    </div>
+    <div class="col-md-6">
+        @Html.LabelFor(m => m.Password, "Contrasena inicial", new { @class = "form-label" })
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control", autocomplete = "new-password" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger small" })
+    </div>
+    <div class="col-md-6">
+        @Html.LabelFor(m => m.Rol, new { @class = "form-label" })
+        @Html.DropDownListFor(m => m.Rol, roles, "Seleccione un rol", new { @class = "form-select" })
+        @Html.ValidationMessageFor(m => m.Rol, "", new { @class = "text-danger small" })
+    </div>
+
+    <div class="col-12 mt-3">
+        <button type="submit" class="btn btn-primary">Crear usuario</button>
+        @Html.ActionLink("Cancelar", "Usuarios", "Admin", null, new { @class = "btn btn-link" })
+    </div>
+}

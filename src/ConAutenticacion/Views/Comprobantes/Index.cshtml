@@ -34,7 +34,7 @@ else
                         <td>@c.FechaEmision.ToString("dd/MM/yyyy HH:mm")</td>
                         <td>@c.EstadoComprobanteCodigo</td>
                         <td>
-                            <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Confirmacion", "Compras", new { id = c.Compra.ReservaId })">Ver</a>
+                            <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Confirmacion", "Compras", new { reservaId = c.Compra.ReservaId })">Ver</a>
                         </td>
                     </tr>
                 }

@@ -14,6 +14,15 @@
     </div>
 </div>
 
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["Mensaje"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
 <div class="row g-4 mb-4">
     <!-- Datos del Titular y Reserva -->
     <div class="col-md-6">
@@ -121,6 +130,7 @@
                         <th>Asiento</th>
                         <th>Importe (USD)</th>
                         <th>Estado Asiento</th>
+                        <th>Cambio de asiento</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -154,6 +164,25 @@
                                 else
                                 {
                                     <span class="badge bg-secondary">@a.Estado</span>
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    var cambios = (Dictionary<int, List<SelectListItem>>)ViewBag.CambioAsiento;
+                                }
+                                @if (cambios != null && cambios.ContainsKey(a.AsignacionId))
+                                {
+                                    @using (Html.BeginForm("CambiarAsiento", "Counter", FormMethod.Post, new { @class = "d-flex gap-2" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="asignacionId" value="@a.AsignacionId" />
+                                        @Html.DropDownList("nuevoAsiento", cambios[a.AsignacionId], new { @class = "form-select form-select-sm" })
+                                        <button type="submit" class="btn btn-sm btn-outline-primary">Cambiar</button>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">No disponible</span>
                                 }
                             </td>
                         </tr>
