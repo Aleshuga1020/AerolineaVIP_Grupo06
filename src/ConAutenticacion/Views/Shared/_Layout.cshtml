@@ -22,9 +22,12 @@
                         <li class="nav-item">@Html.ActionLink("Check-in", "Index", "CheckIn", null, new { @class = "nav-link" })</li>
                         <li class="nav-item">@Html.ActionLink("Comprobantes", "Index", "Comprobantes", null, new { @class = "nav-link" })</li>
                     }
-                    @if (User.IsInRole("Administrador") || User.IsInRole("SuperUsuario"))
+                    @if (User.IsInRole("Counter") || User.IsInRole("Administrador") || User.IsInRole("SuperUsuario"))
                     {
                         <li class="nav-item">@Html.ActionLink("Mostrador (Counter)", "Index", "Counter", null, new { @class = "nav-link" })</li>
+                    }
+                    @if (User.IsInRole("Administrador") || User.IsInRole("SuperUsuario"))
+                    {
                         <li class="nav-item">@Html.ActionLink("Administracion", "Index", "Admin", null, new { @class = "nav-link" })</li>
                     }
                 </ul>

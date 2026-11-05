@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -54,9 +55,24 @@ namespace ConAutenticacion.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Aeronave.Add(aeronave);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (db.Aeronave.Any(a => a.Matricula == aeronave.Matricula))
+                {
+                    ModelState.AddModelError("Matricula", "La matricula " + aeronave.Matricula + " ya esta registrada en otra aeronave.");
+                }
+                else
+                {
+                    try
+                    {
+                        db.Aeronave.Add(aeronave);
+                        db.SaveChanges();
+                        TempData["Mensaje"] = "Aeronave creada correctamente.";
+                        return RedirectToAction("Index");
+                    }
+                    catch (DbUpdateException)
+                    {
+                        ModelState.AddModelError("", "No se pudo guardar la aeronave. Revise los datos ingresados.");
+                    }
+                }
             }
 
             ViewBag.EstadoAeronaveCodigo = new SelectList(db.EstadoAeronave, "Codigo", "Descripcion", aeronave.EstadoAeronaveCodigo);
@@ -90,9 +106,24 @@ namespace ConAutenticacion.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(aeronave).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (db.Aeronave.Any(a => a.Matricula == aeronave.Matricula && a.AeronaveId != aeronave.AeronaveId))
+                {
+                    ModelState.AddModelError("Matricula", "La matricula " + aeronave.Matricula + " ya esta registrada en otra aeronave.");
+                }
+                else
+                {
+                    try
+                    {
+                        db.Entry(aeronave).State = EntityState.Modified;
+                        db.SaveChanges();
+                        TempData["Mensaje"] = "Aeronave actualizada correctamente.";
+                        return RedirectToAction("Index");
+                    }
+                    catch (DbUpdateException)
+                    {
+                        ModelState.AddModelError("", "No se pudo actualizar la aeronave. Revise los datos ingresados.");
+                    }
+                }
             }
             ViewBag.EstadoAeronaveCodigo = new SelectList(db.EstadoAeronave, "Codigo", "Descripcion", aeronave.EstadoAeronaveCodigo);
             ViewBag.ModeloAeronaveId = new SelectList(db.ModeloAeronave, "ModeloAeronaveId", "Fabricante", aeronave.ModeloAeronaveId);

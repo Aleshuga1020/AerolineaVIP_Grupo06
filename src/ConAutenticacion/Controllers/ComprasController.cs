@@ -15,28 +15,28 @@ namespace ConAutenticacion.Controllers
 
         // ---------- Pantalla 11: pago simulado ----------
 
-        public ActionResult Pagar(int id)
+        public ActionResult Pagar(int reservaId)
         {
             var userId = User.Identity.GetUserId();
-            var reserva = db.Reserva.FirstOrDefault(r => r.ReservaId == id && r.UsuarioId == userId);
+            var reserva = db.Reserva.FirstOrDefault(r => r.ReservaId == reservaId && r.UsuarioId == userId);
             if (reserva == null) return HttpNotFound();
 
             if (reserva.EstadoReservaCodigo == "CONFIRMADA")
-                return RedirectToAction("Confirmacion", new { id = id });
+                return RedirectToAction("Confirmacion", new { reservaId = reservaId });
             if (reserva.EstadoReservaCodigo != "PENDIENTE")
             {
                 TempData["Error"] = "Esta reserva no se puede pagar.";
                 return RedirectToAction("MisReservas", "ReservasCliente");
             }
 
-            var compra = db.Compra.FirstOrDefault(c => c.ReservaId == id && c.EstadoCompraCodigo == "PENDIENTE");
+            var compra = db.Compra.FirstOrDefault(c => c.ReservaId == reservaId && c.EstadoCompraCodigo == "PENDIENTE");
             if (compra == null)
             {
-                decimal total = db.ReservaPasajeroVuelo.Where(a => a.ReservaId == id)
+                decimal total = db.ReservaPasajeroVuelo.Where(a => a.ReservaId == reservaId)
                                   .Sum(a => (decimal?)a.ImporteTramo) ?? 0m;
                 compra = new Compra
                 {
-                    ReservaId = id,
+                    ReservaId = reservaId,
                     FechaCompra = DateTime.Now,
                     Importe = total,
                     MonedaCodigo = "USD",
@@ -68,7 +68,7 @@ namespace ConAutenticacion.Controllers
             if (compra.EstadoCompraCodigo != "PENDIENTE")
             {
                 TempData["Error"] = "La compra ya fue procesada.";
-                return RedirectToAction("Confirmacion", new { id = reserva.ReservaId });
+                return RedirectToAction("Confirmacion", new { reservaId = reserva.ReservaId });
             }
 
             numeroTarjeta = (numeroTarjeta ?? "").Replace(" ", "").Trim();
@@ -94,7 +94,7 @@ namespace ConAutenticacion.Controllers
             if (errores.Count > 0)
             {
                 TempData["Error"] = string.Join(" ", errores);
-                return RedirectToAction("Pagar", new { id = reserva.ReservaId });
+                return RedirectToAction("Pagar", new { reservaId = reserva.ReservaId });
             }
 
             // Regla academica de simulacion (documentada): tarjetas que terminan en 0000 se rechazan.
@@ -152,25 +152,25 @@ namespace ConAutenticacion.Controllers
                 {
                     tx.Rollback();
                     TempData["Error"] = "Error al procesar el pago simulado. Intente nuevamente.";
-                    return RedirectToAction("Pagar", new { id = reserva.ReservaId });
+                    return RedirectToAction("Pagar", new { reservaId = reserva.ReservaId });
                 }
             }
 
             if (rechazado)
             {
                 TempData["Error"] = "Pago simulado rechazado. La reserva sigue pendiente; puede intentar con otra tarjeta.";
-                return RedirectToAction("Pagar", new { id = reserva.ReservaId });
+                return RedirectToAction("Pagar", new { reservaId = reserva.ReservaId });
             }
             TempData["Mensaje"] = "Compra " + reserva.CodigoReserva + " pagada. Pago simulado aprobado " + pago.CodigoOperacion + ".";
-            return RedirectToAction("Confirmacion", new { id = reserva.ReservaId });
+            return RedirectToAction("Confirmacion", new { reservaId = reserva.ReservaId });
         }
 
         // ---------- Pantalla 12: confirmacion ----------
 
-        public ActionResult Confirmacion(int id)
+        public ActionResult Confirmacion(int reservaId)
         {
             var userId = User.Identity.GetUserId();
-            var reserva = db.Reserva.FirstOrDefault(r => r.ReservaId == id && r.UsuarioId == userId);
+            var reserva = db.Reserva.FirstOrDefault(r => r.ReservaId == reservaId && r.UsuarioId == userId);
             if (reserva == null) return HttpNotFound();
             return View(ReservaServicio.Detalle(db, reserva));
         }

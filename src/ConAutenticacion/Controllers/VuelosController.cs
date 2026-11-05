@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -55,9 +56,22 @@ namespace ConAutenticacion.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Vuelo.Add(vuelo);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var error = ValidarVuelo(vuelo);
+                if (error == null)
+                {
+                    try
+                    {
+                        db.Vuelo.Add(vuelo);
+                        db.SaveChanges();
+                        TempData["Mensaje"] = "Vuelo creado correctamente.";
+                        return RedirectToAction("Index");
+                    }
+                    catch (DbUpdateException)
+                    {
+                        error = "Ya existe un vuelo con esa frecuencia y fecha de operacion.";
+                    }
+                }
+                ModelState.AddModelError("", error);
             }
 
             ViewBag.AeronaveId = new SelectList(db.Aeronave, "AeronaveId", "Matricula", vuelo.AeronaveId);
@@ -93,9 +107,22 @@ namespace ConAutenticacion.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(vuelo).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var error = ValidarVuelo(vuelo);
+                if (error == null)
+                {
+                    try
+                    {
+                        db.Entry(vuelo).State = EntityState.Modified;
+                        db.SaveChanges();
+                        TempData["Mensaje"] = "Vuelo actualizado correctamente.";
+                        return RedirectToAction("Index");
+                    }
+                    catch (DbUpdateException)
+                    {
+                        error = "Ya existe un vuelo con esa frecuencia y fecha de operacion.";
+                    }
+                }
+                ModelState.AddModelError("", error);
             }
             ViewBag.AeronaveId = new SelectList(db.Aeronave, "AeronaveId", "Matricula", vuelo.AeronaveId);
             ViewBag.EstadoVueloCodigo = new SelectList(db.EstadoVuelo, "Codigo", "Descripcion", vuelo.EstadoVueloCodigo);
@@ -127,6 +154,51 @@ namespace ConAutenticacion.Controllers
             db.Vuelo.Remove(vuelo);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        private static readonly string[] NombresDia = { "", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo" };
+
+        private static int DiaIso(DateTime fecha)
+        {
+            return fecha.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)fecha.DayOfWeek;
+        }
+
+        // Reglas de negocio del vuelo: frecuencia activa, dia de la semana (RN-04), aeronave disponible (RN-06) y sin solapamiento.
+        private string ValidarVuelo(Vuelo vuelo)
+        {
+            var frecuencia = db.Frecuencia.Find(vuelo.FrecuenciaId);
+            if (frecuencia == null) return "Seleccione una frecuencia valida.";
+            if (!frecuencia.Activa) return "La frecuencia seleccionada no esta activa.";
+            if (frecuencia.DiaSemana != DiaIso(vuelo.FechaOperacion))
+            {
+                return "La fecha " + vuelo.FechaOperacion.ToString("dd/MM/yyyy") + " es " + NombresDia[DiaIso(vuelo.FechaOperacion)]
+                     + ", pero la frecuencia opera los " + NombresDia[frecuencia.DiaSemana] + ".";
+            }
+            if (vuelo.AeronaveId.HasValue)
+            {
+                var aeronave = db.Aeronave.Find(vuelo.AeronaveId.Value);
+                if (aeronave == null) return "La aeronave seleccionada no existe.";
+                if (aeronave.EstadoAeronaveCodigo == "NO_DISPONIBLE")
+                    return "La aeronave " + aeronave.Matricula + " esta NO_DISPONIBLE y no puede asignarse a vuelos.";
+                if (vuelo.EstadoVueloCodigo != "CANCELADO")
+                {
+                    var frecuenciasOtros = db.Vuelo
+                        .Where(v => v.AeronaveId == vuelo.AeronaveId && v.FechaOperacion == vuelo.FechaOperacion
+                                 && v.VueloId != vuelo.VueloId && v.EstadoVueloCodigo != "CANCELADO")
+                        .Select(v => v.FrecuenciaId)
+                        .ToList();
+                    foreach (var fid in frecuenciasOtros)
+                    {
+                        var otra = db.Frecuencia.Find(fid);
+                        if (otra != null && frecuencia.HoraSalida < otra.HoraLlegada && otra.HoraSalida < frecuencia.HoraLlegada)
+                        {
+                            return "La aeronave " + aeronave.Matricula + " ya tiene un vuelo entre "
+                                 + otra.HoraSalida.ToString(@"hh\:mm") + " y " + otra.HoraLlegada.ToString(@"hh\:mm") + " ese dia.";
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         protected override void Dispose(bool disposing)

@@ -63,7 +63,7 @@
                         {
                             <div class="col-12">
                                 @Html.LabelFor(m => m.Rol, new { @class = "form-label fw-semibold" })
-                                @Html.DropDownListFor(m => m.Rol, new SelectList(new[] { "Cliente", "Administrador" }), new { @class = "form-select" })
+                                @Html.DropDownListFor(m => m.Rol, new SelectList(new[] { "Cliente", "Administrador", "Counter" }), new { @class = "form-select" })
                                 @Html.ValidationMessageFor(m => m.Rol, "", new { @class = "text-danger small" })
                             </div>
                         }

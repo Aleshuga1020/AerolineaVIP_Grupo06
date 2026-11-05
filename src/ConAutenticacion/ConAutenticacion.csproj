@@ -175,6 +175,7 @@
     <Compile Include="Controllers\ReservasClienteController.cs" />
     <Compile Include="Controllers\ReservasController.cs" />
     <Compile Include="Models\FlujoVM.cs" />
+    <Compile Include="Models\UsuarioAdminVM.cs" />
     <Compile Include="Models\Validaciones.cs" />
     <Compile Include="Services\ReservaServicio.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -434,6 +435,8 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\Usuarios.cshtml" />
     <Content Include="Views\Admin\Reportes.cshtml" />
+    <Content Include="Views\Admin\CrearUsuario.cshtml" />
+    <Content Include="Views\Admin\EditarUsuario.cshtml" />
     <Content Include="Views\Counter\Index.cshtml" />
     <Content Include="Views\Counter\DetalleReserva.cshtml" />
   </ItemGroup>

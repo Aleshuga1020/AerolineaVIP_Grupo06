@@ -85,7 +85,24 @@ namespace ConAutenticacion.Controllers
             return View(asientos);
         }
 
+        // Pantalla 8: seleccion de vuelo y asiento para el cliente autenticado (mismo mapa, con inicio de sesion requerido).
+        [Authorize]
+        public ActionResult SeleccionAsiento(int vueloId)
+        {
+            ViewBag.Pantalla8 = true;
+            return Disponibilidad(vueloId);
+        }
+
         // ---------- 3. Datos de pasajeros (pantalla 9) ----------
+
+        // Acceso directo por URL: sin vuelo ni asientos seleccionados se regresa a la búsqueda.
+        [Authorize]
+        [HttpGet]
+        public ActionResult Pasajeros()
+        {
+            TempData["Error"] = "Seleccione primero un vuelo y sus asientos.";
+            return RedirectToAction("Buscar");
+        }
 
         [Authorize]
         [HttpPost]
@@ -125,6 +142,15 @@ namespace ConAutenticacion.Controllers
         }
 
         // ---------- 5. Registrar la reserva (pantalla 10 -> 11) ----------
+
+        // Acceso directo por URL: sin vuelo ni asientos seleccionados se regresa a la búsqueda.
+        [Authorize]
+        [HttpGet]
+        public ActionResult Confirmar()
+        {
+            TempData["Error"] = "Seleccione primero un vuelo y sus asientos.";
+            return RedirectToAction("Buscar");
+        }
 
         [Authorize]
         [HttpPost]
@@ -211,7 +237,7 @@ namespace ConAutenticacion.Controllers
                     tx.Commit();
 
                     TempData["Mensaje"] = "Reserva " + reserva.CodigoReserva + " registrada. Estado: pendiente de pago.";
-                    return RedirectToAction("Pagar", "Compras", new { id = reserva.ReservaId });
+                    return RedirectToAction("Pagar", "Compras", new { reservaId = reserva.ReservaId });
                 }
                 catch (Exception)
                 {
@@ -235,9 +261,9 @@ namespace ConAutenticacion.Controllers
         }
 
         [Authorize]
-        public ActionResult Gestionar(int id)
+        public ActionResult Gestionar(int reservaId)
         {
-            var reserva = ReservaDeUsuario(id);
+            var reserva = ReservaDeUsuario(reservaId);
             if (reserva == null) return HttpNotFound();
             return View(ReservaServicio.Detalle(db, reserva));
         }
@@ -253,7 +279,7 @@ namespace ConAutenticacion.Controllers
             if (reserva.EstadoReservaCodigo != "PENDIENTE")
             {
                 TempData["Error"] = "Solo se pueden cancelar reservas pendientes de pago. El reembolso esta pendiente de aprobacion (DP-08).";
-                return RedirectToAction("Gestionar", new { id = id });
+                return RedirectToAction("Gestionar", new { reservaId = id });
             }
 
             using (var tx = db.Database.BeginTransaction())

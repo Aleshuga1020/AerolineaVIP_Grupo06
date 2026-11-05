@@ -22,7 +22,7 @@
     </div>
 
     <div class="col-lg-7">
-        @using (Html.BeginForm("ProcesarPago", "Compras", FormMethod.Post, new { onsubmit = "return confirm('Esta seguro de que desea realizar este pago?');" }))
+        @using (Html.BeginForm("ProcesarPago", "Compras", FormMethod.Post, new { id = "formPago" }))
         {
             @Html.AntiForgeryToken()
             <input type="hidden" name="compraId" value="@Model.CompraId" />
@@ -56,8 +56,38 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary mt-3">Pagar</button>
-            @Html.ActionLink("Volver", "Gestionar", "ReservasCliente", new { id = detalle.Reserva.ReservaId }, new { @class = "btn btn-link mt-3" })
+            <button type="button" id="btnPagar" class="btn btn-primary mt-3">Pagar</button>
+            @Html.ActionLink("Volver", "Gestionar", "ReservasCliente", new { reservaId = detalle.Reserva.ReservaId }, new { @class = "btn btn-link mt-3" })
         }
+
+        <div class="modal fade" id="modalConfirmarPago" tabindex="-1" aria-labelledby="modalConfirmarPagoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalConfirmarPagoLabel">Confirmar pago</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-2">Va a pagar la reserva <strong>@detalle.Reserva.CodigoReserva</strong> por <strong>USD @Model.Importe.ToString("0.00")</strong>.</p>
+                        <p class="small text-muted mb-0">Es un pago simulado. Revise los datos de la tarjeta antes de continuar.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Revisar datos</button>
+                        <button type="submit" form="formPago" class="btn btn-primary">Confirmar pago</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+@section scripts {
+    <script>
+        document.getElementById('btnPagar').addEventListener('click', function () {
+            var formulario = document.getElementById('formPago');
+            if (formulario.reportValidity()) {
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('modalConfirmarPago')).show();
+            }
+        });
+    </script>
+}

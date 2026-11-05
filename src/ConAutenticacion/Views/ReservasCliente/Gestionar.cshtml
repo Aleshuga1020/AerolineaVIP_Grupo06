@@ -45,7 +45,7 @@
 
 @if (reserva.EstadoReservaCodigo == "PENDIENTE")
 {
-    <a class="btn btn-primary" href="@Url.Action("Pagar", "Compras", new { id = reserva.ReservaId })">Pagar reserva</a>
+    <a class="btn btn-primary" href="@Url.Action("Pagar", "Compras", new { reservaId = reserva.ReservaId })">Pagar reserva</a>
 
     @using (Html.BeginForm("Cancelar", "ReservasCliente", new { id = reserva.ReservaId }, FormMethod.Post, new { @class = "d-inline", onsubmit = "return confirm('Cancelar esta reserva?');" }))
     {
@@ -55,7 +55,7 @@
 }
 else if (reserva.EstadoReservaCodigo == "CONFIRMADA")
 {
-    <a class="btn btn-outline-primary" href="@Url.Action("Confirmacion", "Compras", new { id = reserva.ReservaId })">Ver confirmacion</a>
+    <a class="btn btn-outline-primary" href="@Url.Action("Confirmacion", "Compras", new { reservaId = reserva.ReservaId })">Ver confirmacion</a>
     <p class="small text-muted mt-2">Las reservas confirmadas no se cancelan desde esta pantalla (DP-08 pendiente).</p>
 }
 

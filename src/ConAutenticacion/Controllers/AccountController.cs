@@ -176,7 +176,7 @@ namespace ConAutenticacion.Controllers
                     // Un visitante siempre queda como Cliente. Solo SuperUsuario puede asignar Cliente o Administrador.
                     bool creadoPorSuper = User.Identity.IsAuthenticated && User.IsInRole("SuperUsuario");
                     string rol = "Cliente";
-                    if (creadoPorSuper && (model.Rol == "Administrador" || model.Rol == "Cliente"))
+                    if (creadoPorSuper && (model.Rol == "Administrador" || model.Rol == "Counter" || model.Rol == "Cliente"))
                         rol = model.Rol;
                     await UserManager.AddToRoleAsync(user.Id, rol);
 
